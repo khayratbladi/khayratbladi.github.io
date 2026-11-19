@@ -1,0 +1,862 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>خيرات بلادي – Khayrat Bladi</title>
+<meta name="description" content="خيرات بلادي: منصة مغربية مجانية لعرض المنتوجات المحلية والمجالية – زيت الزيتون، العسل الحر، أركان، التمور، الفواكه الجافة – مباشرة من المنتج.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===== الهوية البصرية: أخضر الزيتون، ذهبي العسل، طين الأرض ===== */
+  :root {
+    --olive: #4a5d23;
+    --olive-dark: #33421a;
+    --honey: #d99a1e;
+    --honey-light: #fbefd3;
+    --clay: #b5542e;
+    --sand: #faf6ee;
+    --card: #ffffff;
+    --ink: #2a2a22;
+    --muted: #6f6a5c;
+    --line: #e7dfcc;
+    --wa: #1fa855;
+    --radius: 14px;
+    --shadow: 0 2px 10px rgba(60, 50, 20, .08);
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; font-family: 'Tajawal', system-ui, -apple-system, 'Segoe UI', Tahoma, sans-serif;
+    background: var(--sand); color: var(--ink); line-height: 1.55; font-size: 16px;
+  }
+  [dir="ltr"] body { font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; }
+  img { max-width: 100%; display: block; }
+  button, input, select, textarea { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+  .hidden { display: none !important; }
+
+  /* ===== الرأس ===== */
+  header.top {
+    background: var(--olive-dark); color: #fff; position: sticky; top: 0; z-index: 20;
+    box-shadow: 0 2px 8px rgba(0,0,0,.15);
+  }
+  .top .wrap { display: flex; align-items: center; gap: 10px; height: 62px; }
+  .brand { display: flex; align-items: center; gap: 10px; color: #fff; text-decoration: none; min-width: 0; }
+  .brand .mark {
+    width: 38px; height: 38px; border-radius: 50%; background: var(--honey);
+    display: grid; place-items: center; flex: none;
+  }
+  .brand b { font-size: 20px; font-weight: 800; display: block; line-height: 1.1; white-space: nowrap; }
+  .brand small { font-size: 11px; opacity: .8; letter-spacing: .5px; white-space: nowrap; }
+  .spacer { flex: 1; }
+  .lang { display: flex; border: 1px solid rgba(255,255,255,.35); border-radius: 999px; overflow: hidden; flex: none; }
+  .lang button { background: none; border: 0; color: #fff; padding: 5px 9px; font-size: 13px; font-weight: 700; }
+  .lang button.on { background: rgba(255,255,255,.2); }
+  .btn {
+    border: 0; border-radius: 999px; padding: 11px 18px; font-weight: 700; display: inline-flex;
+    align-items: center; justify-content: center; gap: 8px; text-decoration: none; line-height: 1.2;
+  }
+  .btn-honey { background: var(--honey); color: #2a1f05; }
+  .btn-honey:hover { background: #e8a92a; }
+  .btn-olive { background: var(--olive); color: #fff; }
+  .btn-ghost { background: #fff; border: 1.5px solid var(--line); color: var(--ink); }
+  .btn-wa { background: var(--wa); color: #fff; font-size: 17px; padding: 14px 18px; width: 100%; }
+  .btn-block { width: 100%; }
+  .top .btn-honey { padding: 9px 14px; flex: none; }
+
+  /* ===== البطل والبحث ===== */
+  .hero { background: linear-gradient(160deg, var(--olive) 0%, var(--olive-dark) 100%); color: #fff; padding: 26px 0 30px; }
+  .hero h1 { margin: 0 0 6px; font-size: clamp(22px, 5vw, 34px); font-weight: 800; }
+  .hero p { margin: 0 0 18px; opacity: .9; }
+  .search { display: flex; gap: 8px; flex-wrap: wrap; }
+  .search input, .search select {
+    flex: 1 1 220px; border: 0; border-radius: 12px; padding: 13px 14px; background: #fff; min-width: 0; color: var(--ink);
+  }
+  .search select { flex: 0 1 190px; }
+
+  /* ===== الأصناف ===== */
+  .cats { display: flex; gap: 8px; overflow-x: auto; padding: 16px 0 6px; scrollbar-width: none; }
+  .cats::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: none; border: 1.5px solid var(--line); background: #fff; border-radius: 999px;
+    padding: 8px 14px; font-weight: 600; display: inline-flex; gap: 6px; align-items: center; white-space: nowrap;
+  }
+  .chip.on { background: var(--olive); border-color: var(--olive); color: #fff; }
+
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin: 8px 0 12px; color: var(--muted); font-size: 14px; }
+  .bar select { border: 1px solid var(--line); border-radius: 10px; padding: 6px 8px; background: #fff; }
+  .demo-note {
+    background: var(--honey-light); border: 1px dashed var(--honey); border-radius: 12px;
+    padding: 10px 14px; margin-top: 16px; font-size: 14px;
+  }
+
+  /* ===== البطاقات ===== */
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(165px, 1fr)); gap: 12px; padding-bottom: 40px; }
+  @media (min-width: 700px) { .grid { grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; } }
+  .card {
+    background: var(--card); border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
+    border: 0; padding: 0; text-align: start; display: flex; flex-direction: column; position: relative;
+  }
+  .card:hover { transform: translateY(-2px); transition: transform .15s; }
+  .ph { aspect-ratio: 4 / 3; background: var(--honey-light); position: relative; overflow: hidden; }
+  .ph img { width: 100%; height: 100%; object-fit: cover; }
+  .ph .ico { position: absolute; inset: 0; display: grid; place-items: center; font-size: 46px; }
+  .ribbon {
+    position: absolute; top: 8px; inset-inline-start: 8px; background: var(--clay); color: #fff;
+    font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 999px;
+  }
+  .count { position: absolute; bottom: 8px; inset-inline-end: 8px; background: rgba(0,0,0,.55); color: #fff; font-size: 12px; padding: 2px 8px; border-radius: 999px; }
+  .card .body { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 3px; flex: 1; }
+  .card h3 { margin: 0; font-size: 15px; font-weight: 700; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .price { color: var(--olive); font-weight: 800; font-size: 16px; }
+  .meta { color: var(--muted); font-size: 13px; display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+  .stars { color: var(--honey); letter-spacing: 1px; font-size: 13px; }
+  .badge-v { color: var(--olive); font-weight: 700; font-size: 12px; background: #eef3e2; padding: 1px 7px; border-radius: 999px; }
+  .empty { text-align: center; color: var(--muted); padding: 50px 10px; grid-column: 1 / -1; }
+
+  /* ===== النوافذ ===== */
+  .modal { position: fixed; inset: 0; background: rgba(20, 18, 10, .55); z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
+  @media (min-width: 760px) { .modal { align-items: center; padding: 24px; } }
+  .sheet {
+    background: var(--sand); width: 100%; max-width: 760px; max-height: 94vh; overflow-y: auto;
+    border-radius: 20px 20px 0 0; position: relative; padding-bottom: 24px;
+  }
+  @media (min-width: 760px) { .sheet { border-radius: 20px; } }
+  .sheet-head {
+    position: sticky; top: 0; background: var(--sand); z-index: 2; display: flex; align-items: center;
+    gap: 10px; padding: 12px 16px; border-bottom: 1px solid var(--line);
+  }
+  .sheet-head h2 { margin: 0; font-size: 18px; flex: 1; }
+  .x { width: 38px; height: 38px; border-radius: 50%; border: 0; background: #fff; font-size: 22px; line-height: 1; box-shadow: var(--shadow); flex: none; }
+  .pad { padding: 16px; }
+
+  /* معرض الصور */
+  .gallery { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; background: #111; scrollbar-width: none; }
+  .gallery::-webkit-scrollbar { display: none; }
+  .gallery .slide { flex: 0 0 100%; scroll-snap-align: center; aspect-ratio: 4 / 3; display: grid; place-items: center; }
+  .gallery .slide img { width: 100%; height: 100%; object-fit: contain; }
+  .gallery .slide .ico { font-size: 80px; }
+  .dots { display: flex; justify-content: center; gap: 6px; padding: 8px 0 0; }
+  .dots span { width: 7px; height: 7px; border-radius: 50%; background: var(--line); }
+  .dots span.on { background: var(--olive); }
+
+  .d-title { margin: 6px 0 4px; font-size: 22px; font-weight: 800; line-height: 1.3; }
+  .d-price { font-size: 22px; color: var(--olive); font-weight: 800; }
+  .box { background: #fff; border-radius: var(--radius); padding: 14px; margin-top: 14px; box-shadow: var(--shadow); }
+  .box h4 { margin: 0 0 8px; font-size: 16px; }
+  .seller { display: flex; gap: 12px; align-items: center; }
+  .avatar { width: 48px; height: 48px; border-radius: 50%; background: var(--olive); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 20px; flex: none; }
+  .desc { white-space: pre-wrap; margin: 0; }
+  .row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .row .btn { flex: 1 1 140px; }
+  .video { position: relative; width: 100%; aspect-ratio: 16 / 9; border-radius: 12px; overflow: hidden; background: #000; }
+  .video.tall { aspect-ratio: 9 / 16; max-width: 340px; margin: 0 auto; }
+  .video iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+  .tip { font-size: 13px; color: var(--muted); background: var(--honey-light); border-radius: 10px; padding: 10px 12px; margin-top: 14px; }
+
+  .review { border-top: 1px solid var(--line); padding: 10px 0; }
+  .review:first-of-type { border-top: 0; }
+  .review b { font-size: 14px; }
+  .review p { margin: 4px 0 0; font-size: 14px; }
+  .review small { color: var(--muted); }
+
+  /* ===== النماذج ===== */
+  .form { display: grid; gap: 14px; }
+  .field label { display: block; font-weight: 700; margin-bottom: 6px; font-size: 15px; }
+  .field .hint { font-weight: 400; color: var(--muted); font-size: 13px; }
+  .field input, .field select, .field textarea {
+    width: 100%; border: 1.5px solid var(--line); border-radius: 12px; padding: 12px 13px; background: #fff;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus { outline: none; border-color: var(--olive); }
+  .field textarea { min-height: 110px; resize: vertical; }
+  .two { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .sec-title { font-weight: 800; color: var(--olive); margin: 6px 0 -4px; font-size: 15px; }
+
+  /* أزرار الصور على طريقة أفيتو */
+  .photo-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .photo-btn {
+    border: 2px dashed var(--olive); background: #fff; color: var(--olive); border-radius: 14px;
+    padding: 16px 8px; font-weight: 800; display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 15px;
+  }
+  .photo-btn svg { width: 30px; height: 30px; }
+  .photo-btn:disabled { opacity: .45; }
+  .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 10px; }
+  .thumb { position: relative; aspect-ratio: 1; border-radius: 12px; overflow: hidden; background: #eee; }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; }
+  .thumb .del { position: absolute; top: 5px; inset-inline-end: 5px; width: 28px; height: 28px; border-radius: 50%; border: 0; background: rgba(0,0,0,.65); color: #fff; font-size: 16px; line-height: 1; }
+  .thumb .main { position: absolute; bottom: 0; inset-inline: 0; background: var(--olive); color: #fff; font-size: 11px; text-align: center; padding: 2px 0; font-weight: 700; }
+  .thumb.loading { display: grid; place-items: center; color: var(--muted); font-size: 13px; }
+  .counter { font-size: 13px; color: var(--muted); margin-top: 6px; }
+
+  .check { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; }
+  .check input { width: 22px; height: 22px; flex: none; margin-top: 1px; accent-color: var(--olive); }
+  .linkbtn { background: none; border: 0; color: var(--olive); text-decoration: underline; padding: 0; font-weight: 700; }
+
+  .star-pick { display: flex; gap: 4px; direction: ltr; justify-content: flex-end; }
+  [dir="ltr"] .star-pick { justify-content: flex-start; }
+  .star-pick button { background: none; border: 0; font-size: 34px; color: #d9d2c0; padding: 0 2px; line-height: 1; }
+  .star-pick button.on { color: var(--honey); }
+
+  .msg { border-radius: 12px; padding: 12px 14px; font-weight: 600; }
+  .msg.ok { background: #e6f4e9; color: #1e6b33; }
+  .msg.err { background: #fbe9e4; color: #9b3415; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+  .done { text-align: center; padding: 30px 16px; }
+  .done .big { font-size: 60px; }
+
+  footer { background: var(--olive-dark); color: #e8e4d6; padding: 26px 0; font-size: 14px; }
+  footer a, footer .linkbtn { color: #fff; }
+  footer .wrap { display: grid; gap: 8px; }
+
+  .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; z-index: 80; font-size: 14px; }
+  .spinner { width: 34px; height: 34px; border: 4px solid var(--line); border-top-color: var(--olive); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; grid-column: 1 / -1; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  @media (max-width: 420px) {
+    .brand small { display: none; }
+    .top .btn-honey span.lbl-long { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#" id="homeLink" aria-label="Khayrat Bladi">
+      <span class="mark" aria-hidden="true">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M12 3c-3.5 3-5.5 6.2-5.5 9.3A5.5 5.5 0 0 0 12 18a5.5 5.5 0 0 0 5.5-5.7C17.5 9.2 15.5 6 12 3Z" fill="#33421a"/><path d="M12 18v3" stroke="#33421a" stroke-width="2" stroke-linecap="round"/></svg>
+      </span>
+      <span><b data-t="brand">خيرات بلادي</b><small>ⵅⵉⵔⴰⵜ ⴱⵍⴰⴷⵉ · Khayrat Bladi</small></span>
+    </a>
+    <span class="spacer"></span>
+    <div class="lang" role="group" aria-label="Language">
+      <button data-lang="ar">ع</button><button data-lang="fr">FR</button><button data-lang="en">EN</button>
+    </div>
+    <button class="btn btn-honey" id="addBtn">＋ <span class="lbl-long" data-t="post">أضف إعلانك</span></button>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1 data-t="heroTitle">خيرات بلادنا، من المنتج إليك مباشرة</h1>
+    <p data-t="heroSub">زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.</p>
+    <div class="search">
+      <input id="q" type="search" data-ph="searchPh" placeholder="ابحث: عسل الزعتر، زيت بلدي، أملو…" aria-label="search">
+      <select id="cityFilter" aria-label="city"></select>
+    </div>
+  </div>
+</section>
+
+<main class="wrap">
+  <div id="demoNote" class="demo-note hidden" data-t="demo">وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.</div>
+  <nav class="cats" id="cats" aria-label="categories"></nav>
+  <div class="bar">
+    <span id="resultCount"></span>
+    <select id="sort" aria-label="sort">
+      <option value="new" data-t="sortNew">الأحدث</option>
+      <option value="rating" data-t="sortRating">الأعلى تقييماً</option>
+      <option value="priceAsc" data-t="sortPriceAsc">السعر: من الأقل</option>
+      <option value="priceDesc" data-t="sortPriceDesc">السعر: من الأعلى</option>
+    </select>
+  </div>
+  <div class="grid" id="grid"><div class="spinner"></div></div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <b data-t="brand">خيرات بلادي</b>
+    <span data-t="footerAbout">منصة مجانية لعرض المنتوجات المحلية والمجالية المغربية. المنصة فضاء للعرض فقط: البيع والدفع والتوصيل يتم مباشرة بين البائع والمشتري.</span>
+    <span><button class="linkbtn" id="termsLink" data-t="terms">شروط الاستخدام</button></span>
+    <span id="adminContact"></span>
+  </div>
+</footer>
+
+<!-- ===== نافذة الإعلان ===== -->
+<div class="modal hidden" id="detailModal" role="dialog" aria-modal="true">
+  <div class="sheet" id="detailSheet"></div>
+</div>
+
+<!-- ===== نافذة إضافة إعلان ===== -->
+<div class="modal hidden" id="addModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <div class="sheet-head"><h2 data-t="post">أضف إعلانك</h2><button class="x" data-close aria-label="close">×</button></div>
+    <div class="pad" id="addBody">
+      <form class="form" id="addForm" novalidate>
+        <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+        <div class="sec-title" data-t="secPhotos">١. الصور</div>
+        <div class="field">
+          <label><span data-t="photos">صور المنتوج</span> <span class="hint" data-t="photosHint">(صورة واحدة على الأقل، حتى 6 صور)</span></label>
+          <div class="photo-btns">
+            <button type="button" class="photo-btn" id="camBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              <span data-t="takePhoto">التقط صورة</span>
+            </button>
+            <button type="button" class="photo-btn" id="galBtn">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+              <span data-t="fromGallery">من المعرض</span>
+            </button>
+          </div>
+          <input type="file" id="camInput" accept="image/*" capture="environment" hidden>
+          <input type="file" id="galInput" accept="image/*" multiple hidden>
+          <div class="thumbs" id="thumbs"></div>
+          <div class="counter" id="photoCounter"></div>
+        </div>
+        <div class="field">
+          <label for="f_video"><span data-t="video">رابط فيديو</span> <span class="hint" data-t="optional">(اختياري)</span></label>
+          <input id="f_video" name="video" type="url" inputmode="url" placeholder="https://www.tiktok.com/@… / https://youtu.be/…">
+          <div class="hint" data-t="videoHint">انشر الفيديو على تيكتوك أو يوتيوب أو فيسبوك ثم الصق الرابط هنا، وسيظهر داخل إعلانك.</div>
+        </div>
+
+        <div class="sec-title" data-t="secProduct">٢. المنتوج أو الخدمة</div>
+        <div class="field">
+          <label for="f_title" data-t="title">عنوان الإعلان</label>
+          <input id="f_title" name="title" maxlength="90" required data-ph="titlePh" placeholder="مثال: عسل الزعتر الحر من الأطلس – 1 كلغ">
+        </div>
+        <div class="field">
+          <label for="f_cat" data-t="category">الصنف</label>
+          <select id="f_cat" name="cat" required></select>
+        </div>
+        <div class="two">
+          <div class="field">
+            <label for="f_price"><span data-t="price">الثمن (درهم)</span></label>
+            <input id="f_price" name="price" type="number" min="0" step="0.5" inputmode="decimal" placeholder="0">
+          </div>
+          <div class="field">
+            <label for="f_unit" data-t="unit">الوحدة</label>
+            <select id="f_unit" name="unit"></select>
+          </div>
+        </div>
+        <div class="field">
+          <label for="f_desc" data-t="desc">الوصف</label>
+          <textarea id="f_desc" name="desc" maxlength="1500" data-ph="descPh" placeholder="المصدر، طريقة الإنتاج، الكمية المتوفرة، طريقة التوصيل…"></textarea>
+        </div>
+
+        <div class="sec-title" data-t="secSeller">٣. معلومات البائع</div>
+        <div class="field">
+          <label for="f_seller" data-t="sellerName">اسم البائع أو التعاونية</label>
+          <input id="f_seller" name="seller" maxlength="80" required>
+        </div>
+        <div class="two">
+          <div class="field">
+            <label for="f_stype" data-t="sellerType">صفة البائع</label>
+            <select id="f_stype" name="stype"></select>
+          </div>
+          <div class="field">
+            <label for="f_city" data-t="city">المدينة / الجهة</label>
+            <input id="f_city" name="city" maxlength="60" required list="cityList">
+          </div>
+        </div>
+        <div class="field">
+          <label for="f_phone" data-t="phone">رقم واتساب</label>
+          <input id="f_phone" name="phone" type="tel" inputmode="tel" required placeholder="06XXXXXXXX" dir="ltr">
+        </div>
+        <label class="check"><input type="checkbox" name="consent" id="f_consent"> <span><span data-t="consent">أوافق على نشر رقم هاتفي في الإعلان وعلى</span> <button type="button" class="linkbtn" data-terms data-t="terms">شروط الاستخدام</button></span></label>
+
+        <div id="addMsg" class="msg hidden" role="alert"></div>
+        <button class="btn btn-olive btn-block" type="submit" id="submitBtn" data-t="publish">نشر الإعلان</button>
+        <div class="hint" style="text-align:center" data-t="reviewNote">يظهر إعلانك بعد مراجعته في أقرب وقت.</div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ===== نافذة الشروط ===== -->
+<div class="modal hidden" id="termsModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <div class="sheet-head"><h2 data-t="terms">شروط الاستخدام</h2><button class="x" data-close aria-label="close">×</button></div>
+    <div class="pad" id="termsBody"></div>
+  </div>
+</div>
+
+<datalist id="cityList"></datalist>
+
+<script>
+/* =====================================================================
+   الإعدادات – غيّر هذين السطرين فقط
+   ===================================================================== */
+const API_URL = '';          // ضع هنا رابط Web app من Google Apps Script (ينتهي بـ /exec)
+const ADMIN_WHATSAPP = '';   // رقم واتساب الإدارة للتواصل (اختياري) مثل 2126XXXXXXXX
+
+/* ===================================================================== */
+const MAX_PHOTOS = 6;
+
+const CATS = [
+  { id: 'oil',      ico: '🫒', ar: 'زيت الزيتون',          fr: "Huile d'olive",       en: 'Olive oil' },
+  { id: 'honey',    ico: '🍯', ar: 'العسل الحر',           fr: 'Miel',                en: 'Honey' },
+  { id: 'argan',    ico: '🌰', ar: 'أركان',               fr: 'Argan',               en: 'Argan' },
+  { id: 'dates',    ico: '🌴', ar: 'التمور',              fr: 'Dattes',              en: 'Dates' },
+  { id: 'nuts',     ico: '🥜', ar: 'الفواكه الجافة',       fr: 'Fruits secs',         en: 'Dried fruits & nuts' },
+  { id: 'amlou',    ico: '🥣', ar: 'أملو والسمن البلدي',    fr: 'Amlou & smen',        en: 'Amlou & smen' },
+  { id: 'herbs',    ico: '🌿', ar: 'الأعشاب والزعفران',     fr: 'Herbes & safran',     en: 'Herbs & saffron' },
+  { id: 'other',    ico: '🧺', ar: 'منتوجات أخرى',         fr: 'Autres produits',     en: 'Other products' },
+  { id: 'services', ico: '🤝', ar: 'خدمات',               fr: 'Services',            en: 'Services' }
+];
+const STYPES = [
+  { id: 'coop',    ar: 'تعاونية', fr: 'Coopérative', en: 'Cooperative' },
+  { id: 'assoc',   ar: 'جمعية',   fr: 'Association', en: 'Association' },
+  { id: 'company', ar: 'مقاولة',  fr: 'Entreprise',  en: 'Company' },
+  { id: 'person',  ar: 'فرد',     fr: 'Particulier', en: 'Individual' }
+];
+const UNITS = [
+  { id: 'L',       ar: 'لتر',   fr: 'litre',   en: 'litre' },
+  { id: 'kg',      ar: 'كلغ',   fr: 'kg',      en: 'kg' },
+  { id: '500g',    ar: '500 غ', fr: '500 g',   en: '500 g' },
+  { id: 'piece',   ar: 'قطعة',  fr: 'pièce',   en: 'piece' },
+  { id: 'box',     ar: 'علبة',  fr: 'boîte',   en: 'box' },
+  { id: 'service', ar: 'خدمة',  fr: 'service', en: 'service' }
+];
+const CITIES = ['الدار البيضاء','الرباط','فاس','مكناس','مراكش','أكادير','طنجة','تطوان','وجدة','بني ملال','خنيفرة','أزيلال','الراشيدية','أرفود','زاكورة','ورزازات','تالوين','تارودانت','الصويرة','تزنيت','كلميم','العيون','الحسيمة','شفشاون','وزان','تاونات','سطات','الجديدة','آسفي','قلعة السراغنة','إفران','ميدلت','فكيك'];
+
+const T = {
+  ar: {
+    brand: 'خيرات بلادي', post: 'أضف إعلانك', heroTitle: 'خيرات بلادنا، من المنتج إليك مباشرة',
+    heroSub: 'زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.',
+    searchPh: 'ابحث: عسل الزعتر، زيت بلدي، أملو…', allCities: 'كل المدن', all: 'الكل',
+    demo: 'وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.',
+    sortNew: 'الأحدث', sortRating: 'الأعلى تقييماً', sortPriceAsc: 'السعر: من الأقل', sortPriceDesc: 'السعر: من الأعلى',
+    results: n => n + ' إعلان', none: 'لا توجد إعلانات مطابقة. جرّب كلمة أخرى أو صنفاً آخر.',
+    featured: 'مميز', verified: '✓ بائع موثق', dh: 'درهم', per: '/', onAsk: 'السعر عند الاتصال',
+    seller: 'البائع', description: 'الوصف', videoT: 'فيديو', reviewsT: 'التقييمات والتعليقات',
+    noReviews: 'لا توجد تقييمات بعد. كن أول من يقيّم هذا البائع.', reviewsN: n => n + ' تقييم',
+    wa: 'تواصل عبر واتساب', call: 'اتصل', share: 'مشاركة', translate: 'ترجمة',
+    waMsg: t => 'السلام عليكم، رأيت إعلانكم "' + t + '" على منصة خيرات بلادي. ',
+    tip: 'نصيحة: تأكد من البائع وتقييماته قبل الدفع، ويُفضّل الدفع عند الاستلام. المنصة لا تتدخل في عمليات البيع.',
+    openVideo: 'شاهد الفيديو', addReview: 'أضف تقييمك', yourName: 'اسمك', yourPhone: 'رقم هاتفك (لا يُنشر)',
+    yourComment: 'تعليقك عن المنتوج والتعامل', sendReview: 'إرسال التقييم', pickStars: 'اختر عدد النجوم',
+    reviewSent: 'شكراً! سيظهر تقييمك بعد المراجعة.', linkCopied: 'تم نسخ الرابط',
+    secPhotos: '١. الصور', secProduct: '٢. المنتوج أو الخدمة', secSeller: '٣. معلومات البائع',
+    photos: 'صور المنتوج', photosHint: '(صورة واحدة على الأقل، حتى 6 صور)', takePhoto: 'التقط صورة', fromGallery: 'من المعرض',
+    photoCount: (n, m) => n + ' / ' + m + ' صور — الصورة الأولى هي الرئيسية', mainPhoto: 'الرئيسية', preparing: 'جاري التجهيز…',
+    video: 'رابط فيديو', optional: '(اختياري)', videoHint: 'انشر الفيديو على تيكتوك أو يوتيوب أو فيسبوك ثم الصق الرابط هنا، وسيظهر داخل إعلانك.',
+    title: 'عنوان الإعلان', titlePh: 'مثال: عسل الزعتر الحر من الأطلس – 1 كلغ', category: 'الصنف', chooseCat: 'اختر الصنف',
+    price: 'الثمن (درهم)', unit: 'الوحدة', desc: 'الوصف', descPh: 'المصدر، طريقة الإنتاج، الكمية المتوفرة، طريقة التوصيل…',
+    sellerName: 'اسم البائع أو التعاونية', sellerType: 'صفة البائع', city: 'المدينة / الجهة', phone: 'رقم واتساب',
+    consent: 'أوافق على نشر رقم هاتفي في الإعلان وعلى', terms: 'شروط الاستخدام', publish: 'نشر الإعلان', sending: 'جاري النشر…',
+    reviewNote: 'يظهر إعلانك بعد مراجعته في أقرب وقت.',
+    errPhotos: 'أضف صورة واحدة على الأقل.', errRequired: 'املأ الحقول: العنوان، الصنف، الاسم، المدينة.',
+    errPhone: 'رقم الهاتف غير صحيح. مثال: 0612345678', errConsent: 'يجب الموافقة على نشر الرقم وشروط الاستخدام.',
+    errNet: 'تعذر الإرسال. تحقق من الإنترنت وأعد المحاولة.', errRate: 'لقد أرسلت عدة طلبات. حاول بعد ساعة.',
+    doneTitle: 'تم استلام إعلانك!', doneText: 'سيظهر على المنصة بعد مراجعته. شكراً لثقتك في خيرات بلادي.',
+    doneDemo: '(وضع تجريبي: لم يُرسل الإعلان فعلياً.)', another: 'أضف إعلاناً آخر', back: 'العودة للإعلانات',
+    footerAbout: 'منصة مجانية لعرض المنتوجات المحلية والمجالية المغربية. المنصة فضاء للعرض فقط: البيع والدفع والتوصيل يتم مباشرة بين البائع والمشتري.',
+    contactAdmin: 'تواصل مع الإدارة عبر واتساب: ',
+    termsHtml: '<p><b>خيرات بلادي</b> فضاء مجاني لعرض الإعلانات فقط، وليست طرفاً في أي عملية بيع أو دفع أو توصيل.</p><ul><li>البائع مسؤول عن صحة إعلانه وجودة منتوجه ومطابقته للقوانين المعمول بها، خاصة تراخيص المكتب الوطني للسلامة الصحية (ONSSA) للمنتوجات الغذائية.</li><li>يُمنع نشر منتوجات مغشوشة أو ادعاءات علاجية أو محتوى مسيء أو مخالف للقانون.</li><li>تخضع الإعلانات والتقييمات للمراجعة قبل النشر، وللإدارة حق حذف أي محتوى أو حساب مخالف.</li><li>رقم هاتف البائع يُنشر بموافقته للتواصل. أرقام المقيّمين لا تُنشر أبداً وتُستعمل فقط للتحقق.</li><li>ننصح المشترين بالتأكد من البائع وتقييماته قبل أي دفع.</li></ul>'
+  },
+  fr: {
+    brand: 'Khayrat Bladi', post: 'Déposer une annonce', heroTitle: 'Les trésors du Maroc, directement du producteur',
+    heroSub: "Huile d'olive, miel, argan, dattes, fruits secs… des coopératives et producteurs de toutes les régions du Maroc.",
+    searchPh: 'Rechercher : miel de thym, huile beldi, amlou…', allCities: 'Toutes les villes', all: 'Tout',
+    demo: 'Mode démo : les annonces affichées sont des exemples. Connectez la plateforme à Google Sheets pour afficher les vraies annonces.',
+    sortNew: 'Plus récentes', sortRating: 'Mieux notées', sortPriceAsc: 'Prix croissant', sortPriceDesc: 'Prix décroissant',
+    results: n => n + ' annonce' + (n > 1 ? 's' : ''), none: 'Aucune annonce trouvée. Essayez un autre mot ou une autre catégorie.',
+    featured: 'À la une', verified: '✓ Vendeur vérifié', dh: 'DH', per: '/', onAsk: 'Prix sur demande',
+    seller: 'Vendeur', description: 'Description', videoT: 'Vidéo', reviewsT: 'Avis et commentaires',
+    noReviews: 'Aucun avis pour le moment. Soyez le premier à évaluer ce vendeur.', reviewsN: n => n + ' avis',
+    wa: 'Contacter sur WhatsApp', call: 'Appeler', share: 'Partager', translate: 'Traduire',
+    waMsg: t => 'Bonjour, j\'ai vu votre annonce "' + t + '" sur Khayrat Bladi. ',
+    tip: "Conseil : vérifiez le vendeur et ses avis avant de payer ; préférez le paiement à la livraison. La plateforme n'intervient pas dans les ventes.",
+    openVideo: 'Voir la vidéo', addReview: 'Donner mon avis', yourName: 'Votre nom', yourPhone: 'Votre téléphone (non publié)',
+    yourComment: 'Votre avis sur le produit et le vendeur', sendReview: "Envoyer l'avis", pickStars: "Choisissez le nombre d'étoiles",
+    reviewSent: 'Merci ! Votre avis sera publié après vérification.', linkCopied: 'Lien copié',
+    secPhotos: '1. Photos', secProduct: '2. Produit ou service', secSeller: '3. Informations vendeur',
+    photos: 'Photos du produit', photosHint: "(au moins 1, jusqu'à 6)", takePhoto: 'Prendre une photo', fromGallery: 'Galerie',
+    photoCount: (n, m) => n + ' / ' + m + ' photos — la première est la photo principale', mainPhoto: 'Principale', preparing: 'Préparation…',
+    video: 'Lien vidéo', optional: '(facultatif)', videoHint: 'Publiez la vidéo sur TikTok, YouTube ou Facebook puis collez le lien ici : elle apparaîtra dans votre annonce.',
+    title: "Titre de l'annonce", titlePh: "Ex. : Miel de thym de l'Atlas – 1 kg", category: 'Catégorie', chooseCat: 'Choisir la catégorie',
+    price: 'Prix (DH)', unit: 'Unité', desc: 'Description', descPh: 'Origine, mode de production, quantité disponible, livraison…',
+    sellerName: 'Nom du vendeur ou de la coopérative', sellerType: 'Type de vendeur', city: 'Ville / région', phone: 'Numéro WhatsApp',
+    consent: "J'accepte la publication de mon numéro dans l'annonce et les", terms: "Conditions d'utilisation", publish: "Publier l'annonce", sending: 'Publication…',
+    reviewNote: 'Votre annonce apparaîtra après vérification.',
+    errPhotos: 'Ajoutez au moins une photo.', errRequired: 'Remplissez : titre, catégorie, nom, ville.',
+    errPhone: 'Numéro invalide. Ex. : 0612345678', errConsent: "Vous devez accepter la publication du numéro et les conditions.",
+    errNet: "Échec de l'envoi. Vérifiez votre connexion et réessayez.", errRate: 'Trop de demandes. Réessayez dans une heure.',
+    doneTitle: 'Annonce reçue !', doneText: 'Elle sera publiée après vérification. Merci de votre confiance.',
+    doneDemo: "(Mode démo : l'annonce n'a pas été envoyée.)", another: 'Déposer une autre annonce', back: 'Retour aux annonces',
+    footerAbout: "Plateforme gratuite d'annonces de produits du terroir marocain. La plateforme sert uniquement de vitrine : vente, paiement et livraison se font directement entre vendeur et acheteur.",
+    contactAdmin: "Contacter l'équipe sur WhatsApp : ",
+    termsHtml: "<p><b>Khayrat Bladi</b> est un espace gratuit d'annonces et n'est partie à aucune vente, paiement ou livraison.</p><ul><li>Le vendeur est responsable de son annonce, de la qualité de son produit et de sa conformité à la loi, notamment aux autorisations ONSSA pour les produits alimentaires.</li><li>Sont interdits : produits frelatés, allégations thérapeutiques, contenus injurieux ou illégaux.</li><li>Annonces et avis sont vérifiés avant publication ; l'équipe peut supprimer tout contenu non conforme.</li><li>Le numéro du vendeur est publié avec son accord. Les numéros des personnes qui notent ne sont jamais publiés.</li><li>Nous conseillons aux acheteurs de vérifier le vendeur et ses avis avant tout paiement.</li></ul>"
+  },
+  en: {
+    brand: 'Khayrat Bladi', post: 'Post an ad', heroTitle: "Morocco's finest, straight from the producer",
+    heroSub: 'Olive oil, wild honey, argan, dates, dried fruits… from cooperatives and producers across every region of Morocco.',
+    searchPh: 'Search: thyme honey, beldi olive oil, amlou…', allCities: 'All cities', all: 'All',
+    demo: 'Demo mode: the ads shown are examples. Connect the platform to Google Sheets to show real ads.',
+    sortNew: 'Newest', sortRating: 'Top rated', sortPriceAsc: 'Price: low to high', sortPriceDesc: 'Price: high to low',
+    results: n => n + ' ad' + (n === 1 ? '' : 's'), none: 'No matching ads. Try another word or category.',
+    featured: 'Featured', verified: '✓ Verified seller', dh: 'MAD', per: '/', onAsk: 'Price on request',
+    seller: 'Seller', description: 'Description', videoT: 'Video', reviewsT: 'Ratings & reviews',
+    noReviews: 'No reviews yet. Be the first to rate this seller.', reviewsN: n => n + ' review' + (n === 1 ? '' : 's'),
+    wa: 'Contact on WhatsApp', call: 'Call', share: 'Share', translate: 'Translate',
+    waMsg: t => 'Hello, I saw your ad "' + t + '" on Khayrat Bladi. ',
+    tip: 'Tip: check the seller and their reviews before paying; cash on delivery is safest. The platform is not part of any sale.',
+    openVideo: 'Watch the video', addReview: 'Write a review', yourName: 'Your name', yourPhone: 'Your phone (not published)',
+    yourComment: 'Your review of the product and the seller', sendReview: 'Send review', pickStars: 'Choose a star rating',
+    reviewSent: 'Thank you! Your review will appear after moderation.', linkCopied: 'Link copied',
+    secPhotos: '1. Photos', secProduct: '2. Product or service', secSeller: '3. Seller details',
+    photos: 'Product photos', photosHint: '(at least 1, up to 6)', takePhoto: 'Take a photo', fromGallery: 'From gallery',
+    photoCount: (n, m) => n + ' / ' + m + ' photos — the first one is the main photo', mainPhoto: 'Main', preparing: 'Preparing…',
+    video: 'Video link', optional: '(optional)', videoHint: 'Post the video on TikTok, YouTube or Facebook, then paste the link here — it will play inside your ad.',
+    title: 'Ad title', titlePh: 'e.g. Wild thyme honey from the Atlas – 1 kg', category: 'Category', chooseCat: 'Choose a category',
+    price: 'Price (MAD)', unit: 'Unit', desc: 'Description', descPh: 'Origin, how it is made, quantity available, delivery…',
+    sellerName: 'Seller or cooperative name', sellerType: 'Seller type', city: 'City / region', phone: 'WhatsApp number',
+    consent: 'I agree to my number being shown in the ad and to the', terms: 'Terms of use', publish: 'Publish ad', sending: 'Publishing…',
+    reviewNote: 'Your ad will appear after a quick review.',
+    errPhotos: 'Add at least one photo.', errRequired: 'Please fill in: title, category, name, city.',
+    errPhone: 'Invalid phone number. e.g. 0612345678', errConsent: 'Please accept publishing your number and the terms.',
+    errNet: 'Could not send. Check your connection and try again.', errRate: 'Too many requests. Try again in an hour.',
+    doneTitle: 'Ad received!', doneText: 'It will be published after review. Thank you for trusting Khayrat Bladi.',
+    doneDemo: '(Demo mode: the ad was not actually sent.)', another: 'Post another ad', back: 'Back to ads',
+    footerAbout: 'A free listings platform for Moroccan local and regional products. The platform only displays ads: sale, payment and delivery happen directly between seller and buyer.',
+    contactAdmin: 'Contact the team on WhatsApp: ',
+    termsHtml: '<p><b>Khayrat Bladi</b> is a free space for listings only and is not a party to any sale, payment or delivery.</p><ul><li>Sellers are responsible for their ads, the quality of their products and compliance with the law, including ONSSA authorisation for food products.</li><li>Adulterated products, medical claims, abusive or illegal content are forbidden.</li><li>Ads and reviews are moderated before publication; the team may remove any non-compliant content.</li><li>The seller\'s phone number is published with their consent. Reviewers\' numbers are never published.</li><li>Buyers should check the seller and their reviews before any payment.</li></ul>'
+  }
+};
+
+/* ---------- بيانات تجريبية (تظهر فقط إذا كان API_URL فارغاً) ---------- */
+const DEMO = {
+  listings: [
+    { id: 'D1', date: '2026-11-17', featured: true, verified: true, title: 'عسل الزعتر الحر من الأطلس المتوسط', cat: 'honey', stype: 'coop', seller: 'تعاونية نحلة الأطلس', city: 'أزيلال', price: 280, unit: 'kg', desc: 'عسل زعتر طبيعي 100% من مناحلنا في جبال أزيلال.\nالكمية المتوفرة: 40 كلغ.\nالتوصيل لجميع المدن عبر شركات النقل، والدفع عند الاستلام.', phone: '212600000000', video: '', photos: [] },
+    { id: 'D2', date: '2026-11-16', featured: false, verified: true, title: 'زيت زيتون بكر ممتاز – عصرة باردة', cat: 'oil', stype: 'coop', seller: 'تعاونية زيتونة تاونات', city: 'تاونات', price: 65, unit: 'L', desc: 'زيت زيتون من موسم 2025-2026، عصرة باردة، حموضة أقل من 0.8%.\nمتوفر في قنينات 1 لتر و5 لترات.', phone: '212600000000', video: '', photos: [] },
+    { id: 'D3', date: '2026-11-15', featured: false, verified: false, title: 'زيت أركان غذائي محمص', cat: 'argan', stype: 'coop', seller: 'تعاونية تافوكت النسوية', city: 'الصويرة', price: 350, unit: 'L', desc: 'زيت أركان غذائي محمص يدوياً من طرف نساء التعاونية.', phone: '212600000000', video: '', photos: [] },
+    { id: 'D4', date: '2026-11-14', featured: false, verified: false, title: 'تمر المجهول – الموسم الجديد', cat: 'dates', stype: 'person', seller: 'الحاج إبراهيم', city: 'أرفود', price: 120, unit: 'kg', desc: 'تمر المجهول من الصنف الممتاز، حجم كبير. البيع بالكيلو أو بالصندوق.', phone: '212600000000', video: '', photos: [] },
+    { id: 'D5', date: '2026-11-13', featured: false, verified: false, title: 'أملو بلدي باللوز وزيت أركان', cat: 'amlou', stype: 'assoc', seller: 'جمعية نساء تيزنيت', city: 'تزنيت', price: 90, unit: '500g', desc: 'أملو تقليدي من اللوز البلدي وزيت أركان والعسل.', phone: '212600000000', video: '', photos: [] },
+    { id: 'D6', date: '2026-11-12', featured: false, verified: false, title: 'خدمة عصر الزيتون بالطريقة العصرية', cat: 'services', stype: 'company', seller: 'معصرة النور', city: 'فاس', price: '', unit: 'service', desc: 'نستقبل الزيتون للعصر طيلة الموسم. العصرة الباردة والتعبئة.', phone: '212600000000', video: '', photos: [] }
+  ],
+  reviews: [
+    { id: 'r1', listing: 'D1', name: 'سعاد', stars: 5, text: 'عسل أصيل والتوصيل كان سريعاً إلى الرباط. شكراً.', date: '2026-11-18' },
+    { id: 'r2', listing: 'D1', name: 'Karim', stars: 4, text: 'Très bon miel, bien emballé.', date: '2026-11-17' },
+    { id: 'r3', listing: 'D2', name: 'يوسف', stars: 5, text: 'زيت ممتاز، طعم البلدي الحقيقي.', date: '2026-11-16' }
+  ]
+};
+
+/* ---------- الحالة ---------- */
+const S = { lang: 'ar', cat: '', city: '', q: '', sort: 'new', listings: [], reviews: [], photos: [], stars: 0, demo: !API_URL };
+const $ = s => document.querySelector(s);
+const t = k => T[S.lang][k];
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+const lbl = (arr, id) => { const o = arr.find(x => x.id === id); return o ? o[S.lang] : (id || ''); };
+const catOf = id => CATS.find(c => c.id === id) || CATS[7];
+const photoUrl = id => /^(data:|blob:|https?:)/.test(id) ? id : 'https://drive.google.com/thumbnail?id=' + encodeURIComponent(id) + '&sz=w1000';
+const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+function toast(msg) {
+  const d = document.createElement('div'); d.className = 'toast'; d.textContent = msg;
+  document.body.appendChild(d); setTimeout(() => d.remove(), 2200);
+}
+
+/* ---------- اللغة ---------- */
+function setLang(l) {
+  S.lang = T[l] ? l : 'ar';
+  store.set('kb_lang', S.lang);
+  document.documentElement.lang = S.lang;
+  document.documentElement.dir = S.lang === 'ar' ? 'rtl' : 'ltr';
+  document.querySelectorAll('[data-t]').forEach(el => { const v = t(el.dataset.t); if (typeof v === 'string') el.textContent = v; });
+  document.querySelectorAll('[data-ph]').forEach(el => el.placeholder = t(el.dataset.ph));
+  document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
+  $('#termsBody').innerHTML = t('termsHtml');
+  $('#adminContact').innerHTML = ADMIN_WHATSAPP ? esc(t('contactAdmin')) + '<a href="https://wa.me/' + esc(ADMIN_WHATSAPP) + '" target="_blank" rel="noopener" dir="ltr">+' + esc(ADMIN_WHATSAPP) + '</a>' : '';
+  fillSelects();
+  renderCats(); renderGrid();
+  if (!$('#detailModal').classList.contains('hidden') && S.openId) openDetail(S.openId);
+  renderThumbs();
+}
+
+function fillSelects() {
+  const keepCat = $('#f_cat').value, keepUnit = $('#f_unit').value, keepType = $('#f_stype').value;
+  $('#f_cat').innerHTML = '<option value="">' + esc(t('chooseCat')) + '</option>' + CATS.map(c => '<option value="' + c.id + '">' + c.ico + ' ' + esc(c[S.lang]) + '</option>').join('');
+  $('#f_unit').innerHTML = UNITS.map(u => '<option value="' + u.id + '">' + esc(u[S.lang]) + '</option>').join('');
+  $('#f_stype').innerHTML = STYPES.map(s => '<option value="' + s.id + '">' + esc(s[S.lang]) + '</option>').join('');
+  $('#f_cat').value = keepCat; if (keepUnit) $('#f_unit').value = keepUnit; if (keepType) $('#f_stype').value = keepType;
+  const cities = [...new Set(S.listings.map(l => l.city).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ar'));
+  $('#cityFilter').innerHTML = '<option value="">' + esc(t('allCities')) + '</option>' + cities.map(c => '<option>' + esc(c) + '</option>').join('');
+  $('#cityFilter').value = S.city;
+  $('#cityList').innerHTML = [...new Set(CITIES.concat(cities))].map(c => '<option value="' + esc(c) + '">').join('');
+}
+
+/* ---------- التقييمات ---------- */
+function sellerKey(l) { return l.phone || l.seller; }
+function sellerRating(l) {
+  const ids = new Set(S.listings.filter(x => sellerKey(x) === sellerKey(l)).map(x => x.id));
+  const rs = S.reviews.filter(r => ids.has(r.listing));
+  const avg = rs.length ? rs.reduce((s, r) => s + r.stars, 0) / rs.length : 0;
+  return { avg, n: rs.length };
+}
+function starStr(avg) { const f = Math.round(avg); return '★'.repeat(f) + '☆'.repeat(5 - f); }
+function priceStr(l) {
+  if (l.price === '' || l.price == null || isNaN(l.price) || Number(l.price) === 0) return t('onAsk');
+  return Number(l.price).toLocaleString(S.lang === 'ar' ? 'ar-MA' : 'fr-MA') + ' ' + t('dh') + (l.unit && l.unit !== 'service' ? ' ' + t('per') + ' ' + lbl(UNITS, l.unit) : '');
+}
+
+/* ---------- العرض ---------- */
+function renderCats() {
+  const counts = {}; S.listings.forEach(l => counts[l.cat] = (counts[l.cat] || 0) + 1);
+  $('#cats').innerHTML = '<button class="chip' + (S.cat ? '' : ' on') + '" data-cat="">' + esc(t('all')) + '</button>' +
+    CATS.map(c => '<button class="chip' + (S.cat === c.id ? ' on' : '') + '" data-cat="' + c.id + '">' + c.ico + ' ' + esc(c[S.lang]) + (counts[c.id] ? ' <small>(' + counts[c.id] + ')</small>' : '') + '</button>').join('');
+}
+
+function filtered() {
+  const q = S.q.trim().toLowerCase();
+  let list = S.listings.filter(l =>
+    (!S.cat || l.cat === S.cat) && (!S.city || l.city === S.city) &&
+    (!q || [l.title, l.desc, l.seller, l.city, lbl(CATS, l.cat)].join(' ').toLowerCase().includes(q)));
+  const num = l => (l.price === '' || l.price == null || Number(l.price) === 0) ? null : Number(l.price);
+  list.sort((a, b) => {
+    if (a.featured !== b.featured) return a.featured ? -1 : 1;
+    if (S.sort === 'rating') return sellerRating(b).avg - sellerRating(a).avg;
+    if (S.sort === 'priceAsc' || S.sort === 'priceDesc') {
+      const pa = num(a), pb = num(b);
+      if (pa === null) return 1; if (pb === null) return -1;
+      return S.sort === 'priceAsc' ? pa - pb : pb - pa;
+    }
+    return String(b.date).localeCompare(String(a.date));
+  });
+  return list;
+}
+
+function photoBlock(l, cls) {
+  const c = catOf(l.cat);
+  return l.photos && l.photos.length
+    ? '<img src="' + esc(photoUrl(l.photos[0])) + '" alt="' + esc(l.title) + '" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement(\'div\'),{className:\'ico\',textContent:\'' + c.ico + '\'}))">'
+    : '<div class="ico">' + c.ico + '</div>';
+}
+
+function renderGrid() {
+  if (!S.loaded) return;
+  const list = filtered();
+  $('#resultCount').textContent = t('results')(list.length);
+  if (!list.length) { $('#grid').innerHTML = '<div class="empty">' + esc(t('none')) + '</div>'; return; }
+  $('#grid').innerHTML = list.map(l => {
+    const r = sellerRating(l);
+    return '<button class="card" data-id="' + esc(l.id) + '">' +
+      '<div class="ph">' + photoBlock(l) + (l.featured ? '<span class="ribbon">' + esc(t('featured')) + '</span>' : '') +
+      (l.photos && l.photos.length > 1 ? '<span class="count">📷 ' + l.photos.length + '</span>' : '') + (l.video ? '<span class="count" style="inset-inline-end:auto;inset-inline-start:8px">▶</span>' : '') + '</div>' +
+      '<div class="body"><h3>' + esc(l.title) + '</h3><div class="price">' + esc(priceStr(l)) + '</div>' +
+      '<div class="meta">📍 ' + esc(l.city) + (l.verified ? ' <span class="badge-v">' + esc(t('verified')) + '</span>' : '') + '</div>' +
+      (r.n ? '<div class="meta"><span class="stars">' + starStr(r.avg) + '</span> ' + r.avg.toFixed(1) + ' (' + r.n + ')</div>' : '') +
+      '</div></button>';
+  }).join('');
+}
+
+/* ---------- الفيديو ---------- */
+function videoEmbed(url) {
+  if (!url) return '';
+  let m;
+  if ((m = url.match(/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/)))
+    return '<div class="video' + (/shorts\//.test(url) ? ' tall' : '') + '"><iframe src="https://www.youtube.com/embed/' + m[1] + '" allowfullscreen loading="lazy" title="video"></iframe></div>';
+  if ((m = url.match(/tiktok\.com\/@[^/]+\/video\/(\d+)/)))
+    return '<div class="video tall"><iframe src="https://www.tiktok.com/embed/v2/' + m[1] + '" allowfullscreen loading="lazy" title="video"></iframe></div>';
+  return '<a class="btn btn-ghost btn-block" href="' + esc(url) + '" target="_blank" rel="noopener">▶ ' + esc(t('openVideo')) + '</a>';
+}
+
+/* ---------- صفحة الإعلان ---------- */
+function openDetail(id) {
+  const l = S.listings.find(x => x.id === id);
+  if (!l) return;
+  S.openId = id; S.stars = 0;
+  const c = catOf(l.cat), r = sellerRating(l);
+  const rev = S.reviews.filter(x => x.listing === id).sort((a, b) => String(b.date).localeCompare(String(a.date)));
+  const photos = l.photos && l.photos.length ? l.photos : [null];
+  const waText = encodeURIComponent(t('waMsg')(l.title));
+  const tl = S.lang === 'ar' ? 'ar' : S.lang;
+  const trUrl = 'https://translate.google.com/?sl=auto&tl=' + tl + '&op=translate&text=' + encodeURIComponent(l.title + '\n\n' + l.desc);
+  $('#detailSheet').innerHTML =
+    '<div class="sheet-head"><h2>' + c.ico + ' ' + esc(lbl(CATS, l.cat)) + '</h2><button class="x" data-close aria-label="close">×</button></div>' +
+    '<div class="gallery" id="gal">' + photos.map(p => '<div class="slide">' + (p ? '<img src="' + esc(photoUrl(p)) + '" alt="' + esc(l.title) + '">' : '<div class="ico">' + c.ico + '</div>') + '</div>').join('') + '</div>' +
+    (photos.length > 1 ? '<div class="dots" id="dots">' + photos.map((_, i) => '<span' + (i ? '' : ' class="on"') + '></span>').join('') + '</div>' : '') +
+    '<div class="pad">' +
+      (l.featured ? '<span class="ribbon" style="position:static;display:inline-block">' + esc(t('featured')) + '</span>' : '') +
+      '<h1 class="d-title">' + esc(l.title) + '</h1>' +
+      '<div class="d-price">' + esc(priceStr(l)) + '</div>' +
+      '<div class="meta" style="margin-top:4px">📍 ' + esc(l.city) + '</div>' +
+      '<div class="row"><a class="btn btn-wa" href="https://wa.me/' + esc(l.phone) + '?text=' + waText + '" target="_blank" rel="noopener">' +
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M17.5 14.4c-.3-.1-1.8-.9-2-1-.3-.1-.5-.1-.7.1-.2.3-.8 1-.9 1.2-.2.2-.3.2-.6.1-.3-.1-1.3-.5-2.4-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6l.4-.5c.2-.2.2-.3.3-.5.1-.2 0-.4 0-.5l-.9-2.2c-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.1.2 2.1 3.2 5.1 4.5 2.5 1 3 .8 3.5.7.6-.1 1.8-.7 2-1.4.2-.7.2-1.3.2-1.4-.1-.2-.3-.3-.6-.4zM12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2z"/></svg>' +
+        esc(t('wa')) + '</a></div>' +
+      '<div class="row"><a class="btn btn-ghost" href="tel:+' + esc(l.phone) + '">📞 ' + esc(t('call')) + '</a>' +
+        '<button class="btn btn-ghost" id="shareBtn">🔗 ' + esc(t('share')) + '</button></div>' +
+
+      '<div class="box"><h4>' + esc(t('seller')) + '</h4><div class="seller"><div class="avatar">' + esc((l.seller || '?').trim().charAt(0)) + '</div><div>' +
+        '<b>' + esc(l.seller) + '</b><div class="meta">' + esc(lbl(STYPES, l.stype)) + ' · ' + esc(l.city) + (l.verified ? ' <span class="badge-v">' + esc(t('verified')) + '</span>' : '') + '</div>' +
+        '<div class="meta">📞 <bdi dir="ltr">+' + esc(l.phone) + '</bdi></div>' +
+        (r.n ? '<div class="meta"><span class="stars">' + starStr(r.avg) + '</span> ' + r.avg.toFixed(1) + ' · ' + esc(t('reviewsN')(r.n)) + '</div>' : '') +
+      '</div></div></div>' +
+
+      (l.desc ? '<div class="box"><h4>' + esc(t('description')) + '</h4><p class="desc">' + esc(l.desc) + '</p>' +
+        '<div class="row"><a class="btn btn-ghost" href="' + esc(trUrl) + '" target="_blank" rel="noopener">🌐 ' + esc(t('translate')) + '</a></div></div>' : '') +
+
+      (l.video ? '<div class="box"><h4>' + esc(t('videoT')) + '</h4>' + videoEmbed(l.video) + '</div>' : '') +
+
+      '<div class="tip">⚠️ ' + esc(t('tip')) + '</div>' +
+
+      '<div class="box"><h4>' + esc(t('reviewsT')) + '</h4>' +
+        (rev.length ? rev.map(x => '<div class="review"><b>' + esc(x.name) + '</b> <span class="stars">' + starStr(x.stars) + '</span><br><small>' + esc(String(x.date).slice(0, 10)) + '</small>' + (x.text ? '<p>' + esc(x.text) + '</p>' : '') + '</div>').join('')
+          : '<p class="meta" style="margin:0">' + esc(t('noReviews')) + '</p>') +
+      '</div>' +
+
+      '<div class="box"><h4>' + esc(t('addReview')) + '</h4>' +
+        '<form class="form" id="revForm" novalidate><input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">' +
+        '<div class="field"><label>' + esc(t('pickStars')) + '</label><div class="star-pick" id="starPick">' + [1, 2, 3, 4, 5].map(n => '<button type="button" data-star="' + n + '" aria-label="' + n + '">★</button>').join('') + '</div></div>' +
+        '<div class="two"><div class="field"><label for="r_name">' + esc(t('yourName')) + '</label><input id="r_name" name="name" maxlength="60" required></div>' +
+        '<div class="field"><label for="r_phone">' + esc(t('yourPhone')) + '</label><input id="r_phone" name="phone" type="tel" inputmode="tel" dir="ltr" placeholder="06XXXXXXXX" required></div></div>' +
+        '<div class="field"><label for="r_text">' + esc(t('yourComment')) + '</label><textarea id="r_text" name="text" maxlength="800"></textarea></div>' +
+        '<div id="revMsg" class="msg hidden" role="alert"></div>' +
+        '<button class="btn btn-olive btn-block" type="submit">' + esc(t('sendReview')) + '</button></form>' +
+      '</div>' +
+    '</div>';
+  showModal('#detailModal');
+  try { if (location.hash !== '#' + id) history.replaceState(null, '', '#' + id); } catch (e) {}
+  const gal = $('#gal'), dots = $('#dots');
+  if (gal && dots) gal.addEventListener('scroll', () => {
+    const i = Math.round(Math.abs(gal.scrollLeft) / gal.clientWidth);
+    dots.querySelectorAll('span').forEach((s, k) => s.classList.toggle('on', k === i));
+  }, { passive: true });
+  $('#shareBtn').onclick = () => shareListing(l);
+  $('#starPick').onclick = e => { const b = e.target.closest('[data-star]'); if (!b) return; S.stars = +b.dataset.star; $('#starPick').querySelectorAll('button').forEach(x => x.classList.toggle('on', +x.dataset.star <= S.stars)); };
+  $('#revForm').onsubmit = e => submitReview(e, l);
+}
+
+async function shareListing(l) {
+  const url = location.href.split('#')[0] + '#' + l.id;
+  try { if (navigator.share) { await navigator.share({ title: l.title, url }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+  try { await navigator.clipboard.writeText(url); toast(t('linkCopied')); } catch (e) { toast(url); }
+}
+
+/* ---------- النوافذ ---------- */
+function showModal(sel) { $(sel).classList.remove('hidden'); document.body.style.overflow = 'hidden'; }
+function hideModal(m) {
+  m.classList.add('hidden');
+  if (!document.querySelector('.modal:not(.hidden)')) document.body.style.overflow = '';
+  if (m.id === 'detailModal' || m.id === 'addModal') { S.openId = null; try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+}
+document.addEventListener('click', e => {
+  if (e.target.matches('[data-close]')) hideModal(e.target.closest('.modal'));
+  else if (e.target.classList.contains('modal')) hideModal(e.target);
+  else if (e.target.closest('[data-terms]')) showModal('#termsModal');
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { const ms = [...document.querySelectorAll('.modal:not(.hidden)')]; if (ms.length) hideModal(ms[ms.length - 1]); } });
+
+/* ---------- الصور (أزرار مثل أفيتو) ---------- */
+function compress(file) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file), img = new Image();
+    img.onload = () => {
+      const max = 1280, s = Math.min(1, max / Math.max(img.width, img.height));
+      const w = Math.round(img.width * s), h = Math.round(img.height * s);
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      const ctx = cv.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, w, h); ctx.drawImage(img, 0, 0, w, h);
+      URL.revokeObjectURL(url); resolve(cv.toDataURL('image/jpeg', 0.8));
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('img')); };
+    img.src = url;
+  });
+}
+async function addFiles(files) {
+  const room = MAX_PHOTOS - S.photos.length;
+  const list = [...files].filter(f => /^image\//.test(f.type) || /\.(jpe?g|png|webp|heic)$/i.test(f.name)).slice(0, room);
+  for (const f of list) {
+    const slot = { loading: true }; S.photos.push(slot); renderThumbs();
+    try { slot.data = await compress(f); slot.loading = false; }
+    catch (e) { S.photos.splice(S.photos.indexOf(slot), 1); }
+    renderThumbs();
+  }
+}
+function renderThumbs() {
+  const box = $('#thumbs'); if (!box) return;
+  box.innerHTML = S.photos.map((p, i) => p.loading
+    ? '<div class="thumb loading">' + esc(t('preparing')) + '</div>'
+    : '<div class="thumb"><img src="' + p.data + '" alt=""><button type="button" class="del" data-del="' + i + '" aria-label="remove">×</button>' + (i === 0 ? '<span class="main">' + esc(t('mainPhoto')) + '</span>' : '') + '</div>').join('');
+  const n = S.photos.length;
+  $('#photoCounter').textContent = n ? t('photoCount')(n, MAX_PHOTOS) : '';
+  $('#camBtn').disabled = $('#galBtn').disabled = n >= MAX_PHOTOS;
+}
+$('#camBtn').onclick = () => $('#camInput').click();
+$('#galBtn').onclick = () => $('#galInput').click();
+$('#camInput').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+$('#galInput').onchange = e => { addFiles(e.target.files); e.target.value = ''; };
+$('#thumbs').onclick = e => { const b = e.target.closest('[data-del]'); if (b) { S.photos.splice(+b.dataset.del, 1); renderThumbs(); } };
+
+/* ---------- الإرسال ---------- */
+function validPhone(p) { const d = String(p).replace(/[^\d]/g, ''); return /^0[5-7]\d{8}$/.test(d) || /^\d{9,15}$/.test(d) && d.length >= 11; }
+function showMsg(el, cls, text) { el.className = 'msg ' + cls; el.textContent = text; el.classList.remove('hidden'); el.scrollIntoView({ block: 'nearest', behavior: 'smooth' }); }
+async function post(payload) {
+  if (S.demo) { await new Promise(r => setTimeout(r, 900)); return { ok: true, demo: true }; }
+  const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }); // text/plain: بلا preflight
+  return res.json();
+}
+function errText(code) { return code === 'phone' ? t('errPhone') : code === 'rate' ? t('errRate') : code === 'consent' ? t('errConsent') : code === 'photos' ? t('errPhotos') : code === 'missing' ? t('errRequired') : t('errNet'); }
+
+$('#addForm').onsubmit = async e => {
+  e.preventDefault();
+  const f = e.target, msg = $('#addMsg'), btn = $('#submitBtn');
+  const data = Object.fromEntries(new FormData(f).entries());
+  if (!S.photos.filter(p => p.data).length) return showMsg(msg, 'err', t('errPhotos'));
+  if (S.photos.some(p => p.loading)) return;
+  if (!data.title.trim() || !data.cat || !data.seller.trim() || !data.city.trim()) return showMsg(msg, 'err', t('errRequired'));
+  if (!validPhone(data.phone)) return showMsg(msg, 'err', t('errPhone'));
+  if (!f.consent.checked) return showMsg(msg, 'err', t('errConsent'));
+  btn.disabled = true; btn.textContent = t('sending'); msg.classList.add('hidden');
+  try {
+    const r = await post({ action: 'listing', ...data, consent: true, photos: S.photos.map(p => p.data) });
+    if (!r.ok) throw new Error(r.error);
+    $('#addBody').innerHTML = '<div class="done"><div class="big">🎉</div><h2>' + esc(t('doneTitle')) + '</h2><p>' + esc(t('doneText')) + '</p>' + (r.demo ? '<p class="meta">' + esc(t('doneDemo')) + '</p>' : '') +
+      '<div class="row"><button class="btn btn-honey" id="againBtn">＋ ' + esc(t('another')) + '</button><button class="btn btn-ghost" data-close>' + esc(t('back')) + '</button></div></div>';
+    $('#againBtn').onclick = () => location.reload();
+    S.photos = [];
+  } catch (err) {
+    showMsg(msg, 'err', errText(err && err.message));
+    btn.disabled = false; btn.textContent = t('publish');
+  }
+};
+
+async function submitReview(e, l) {
+  e.preventDefault();
+  const f = e.target, msg = $('#revMsg'), btn = f.querySelector('[type=submit]');
+  const data = Object.fromEntries(new FormData(f).entries());
+  if (!S.stars) return showMsg(msg, 'err', t('pickStars'));
+  if (!data.name.trim()) return showMsg(msg, 'err', t('yourName'));
+  if (!validPhone(data.phone)) return showMsg(msg, 'err', t('errPhone'));
+  btn.disabled = true;
+  try {
+    const r = await post({ action: 'review', listing: l.id, stars: S.stars, ...data });
+    if (!r.ok) throw new Error(r.error);
+    f.outerHTML = '<div class="msg ok">' + esc(t('reviewSent')) + '</div>';
+  } catch (err) { showMsg(msg, 'err', errText(err && err.message)); btn.disabled = false; }
+}
+
+/* ---------- الأحداث العامة ---------- */
+document.querySelectorAll('.lang button').forEach(b => b.onclick = () => setLang(b.dataset.lang));
+$('#addBtn').onclick = () => showModal('#addModal');
+$('#homeLink').onclick = e => { e.preventDefault(); S.cat = ''; S.q = ''; S.city = ''; $('#q').value = ''; $('#cityFilter').value = ''; renderCats(); renderGrid(); window.scrollTo({ top: 0, behavior: 'smooth' }); };
+$('#termsLink').onclick = () => showModal('#termsModal');
+$('#cats').onclick = e => { const b = e.target.closest('[data-cat]'); if (!b) return; S.cat = b.dataset.cat; renderCats(); renderGrid(); };
+$('#q').oninput = e => { S.q = e.target.value; renderGrid(); };
+$('#cityFilter').onchange = e => { S.city = e.target.value; renderGrid(); };
+$('#sort').onchange = e => { S.sort = e.target.value; renderGrid(); };
+$('#grid').onclick = e => { const c = e.target.closest('.card'); if (c) openDetail(c.dataset.id); };
+function route() { const h = decodeURIComponent(location.hash.slice(1)); if (h === 'add') showModal('#addModal'); else if (h && S.listings.some(l => l.id === h)) openDetail(h); }
+window.addEventListener('hashchange', route);
+
+/* ---------- التحميل ---------- */
+async function load() {
+  let data = DEMO;
+  if (!S.demo) {
+    try { const r = await fetch(API_URL); data = await r.json(); if (!data.ok) throw 0; }
+    catch (e) { data = { listings: [], reviews: [] }; }
+  }
+  S.listings = data.listings || []; S.reviews = data.reviews || []; S.loaded = true;
+  $('#demoNote').classList.toggle('hidden', !S.demo);
+  setLang(S.lang);
+  route();
+}
+const saved = store.get('kb_lang');
+const nav = (navigator.language || 'ar').slice(0, 2);
+S.lang = saved || (nav === 'fr' ? 'fr' : 'ar');
+setLang(S.lang);
+load();
+</script>
+</body>
+</html>
