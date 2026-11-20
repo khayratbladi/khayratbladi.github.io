@@ -240,6 +240,15 @@
   .plans { background: var(--honey-light); border-radius: 12px; padding: 12px 14px; font-size: 14px; }
   .plans ul { margin: 6px 0; padding-inline-start: 18px; }
   .plans b { color: var(--olive-dark); }
+  .design-box { border: 1.5px dashed var(--honey); border-radius: 12px; padding: 12px 14px; }
+  .design-opts { display: grid; gap: 8px; margin-top: 8px; }
+  .design-opt { display: flex; gap: 10px; align-items: flex-start; border: 1px solid #e6dcc3; border-radius: 10px; padding: 10px 12px; cursor: pointer; background: #fff; }
+  .design-opt input { margin-top: 4px; accent-color: var(--olive-dark); }
+  .design-opt b { display: block; color: var(--olive-dark); }
+  .design-opt .price { font-weight: 800; color: #8a5a00; white-space: nowrap; margin-inline-start: auto; }
+  .design-opt small { color: #6b6b5f; }
+  .design-banner { display: flex; align-items: center; gap: 12px; width: 100%; text-align: start; margin: 14px 0 4px; padding: 12px 16px; border: 0; border-radius: 14px; background: var(--honey-light); color: var(--olive-dark); font: inherit; font-weight: 700; cursor: pointer; }
+  .design-banner .go { margin-inline-start: auto; background: var(--olive-dark); color: #fff; border-radius: 999px; padding: 6px 14px; font-size: 14px; white-space: nowrap; }
   .one-photo { display: flex; gap: 10px; align-items: center; }
   .one-photo .prev { width: 72px; height: 72px; border-radius: 12px; overflow: hidden; background: #eee; flex: none; display: grid; place-items: center; color: var(--muted); font-size: 24px; }
   .one-photo .prev.round { border-radius: 50%; }
@@ -284,6 +293,7 @@
 
 <main class="wrap">
   <div id="demoNote" class="demo-note hidden" data-t="demo">وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.</div>
+  <button type="button" class="design-banner" data-openstore data-design><span>🎨</span><span data-t="designBanner">متجرك بمظهر احترافي: نصمّم لك الشعار والغلاف والوصف ابتداءً من 150 درهم</span><span class="go" data-t="designGo">اطلب الخدمة</span></button>
   <section class="stores-sec hidden" id="storesSec">
     <div class="sec-h"><h2 data-t="storesT">متاجر البائعين</h2></div>
     <div class="stores" id="stores"></div>
@@ -419,6 +429,11 @@
           <div class="one-photo"><div class="prev" id="coverPrev">🖼️</div><button type="button" class="photo-btn" id="coverBtn" data-t="chooseCover">اختر صورة الغلاف</button></div>
           <input type="file" id="coverInput" accept="image/*" hidden>
         </div>
+        <div class="field design-box">
+          <label data-t="designQ">ليس لديك شعار أو صور احترافية؟</label>
+          <div class="hint" data-t="designHint">اختر باقة تصميم وسنتواصل معك عبر واتساب. يمكنك ترك الشعار فارغاً.</div>
+          <div class="design-opts" id="designOpts"></div>
+        </div>
         <div class="field">
           <label for="s_name" data-t="storeName">اسم المتجر</label>
           <input id="s_name" name="name" maxlength="80" required>
@@ -508,7 +523,11 @@ const T = {
     storeSubmit: 'طلب فتح المتجر', storeDoneTitle: 'تم استلام طلب متجرك!', storeDoneText: 'سنتواصل معك عبر واتساب لتأكيد الاشتراك وتفعيل متجرك.',
     limitNote: 'الحساب المجاني: حتى 5 إعلانات لكل رقم هاتف. لديك منتوجات كثيرة؟',
     errLimit: 'وصلت إلى الحد المجاني (5 إعلانات). افتح متجراً لنشر عدد غير محدود من المنتوجات.',
-    errExists: 'لديك متجر مفعّل بهذا الرقم. أضف منتوجاتك مباشرة عبر «أضف إعلانك».', errLogo: 'أضف شعاراً أو صورة للبائع.',
+    errExists: 'لديك متجر مفعّل بهذا الرقم. أضف منتوجاتك مباشرة عبر «أضف إعلانك».', errLogo: 'أضف شعاراً أو اختر باقة تصميم.',
+    designBanner: 'متجرك بمظهر احترافي: نصمّم لك الشعار والغلاف والوصف ابتداءً من 150 درهم', designGo: 'اطلب الخدمة',
+    designQ: 'ليس لديك شعار أو صور احترافية؟', designHint: 'اختر باقة تصميم وسنتواصل معك عبر واتساب. يمكنك ترك الشعار فارغاً.',
+    designPlans: [['', 'لا، لدي شعاري وصوري', '', ''], ['start', 'باقة الانطلاق', 'شعار + صورة غلاف + نبذة بالعربية والفرنسية', '150 درهم'], ['identity', 'باقة الهوية', 'الانطلاق + تحسين صور 10 منتوجات + وصف احترافي لكل منتوج', '350 درهم'], ['ready', 'المتجر الجاهز', 'الهوية + نُدخل منتوجاتك في المتجر + ملصق للواتساب', '600 درهم']],
+    designDone: 'سنتواصل معك عبر واتساب لبدء التصميم.',
     brand: 'خيرات بلادي', post: 'أضف إعلانك', heroTitle: 'خيرات بلادنا، من المنتج إليك مباشرة',
     heroSub: 'زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.',
     searchPh: 'ابحث: عسل الزعتر، زيت بلدي، أملو…', allCities: 'كل المدن', all: 'الكل',
@@ -552,7 +571,11 @@ const T = {
     storeSubmit: 'Demander ma boutique', storeDoneTitle: 'Demande reçue !', storeDoneText: 'Nous vous contacterons sur WhatsApp pour confirmer et activer votre boutique.',
     limitNote: "Compte gratuit : jusqu'à 5 annonces par numéro. Beaucoup de produits ?",
     errLimit: 'Limite gratuite atteinte (5 annonces). Ouvrez une boutique pour publier sans limite.',
-    errExists: 'Une boutique est déjà active avec ce numéro. Ajoutez vos produits via « Déposer une annonce ».', errLogo: 'Ajoutez un logo ou une photo.',
+    errExists: 'Une boutique est déjà active avec ce numéro. Ajoutez vos produits via « Déposer une annonce ».', errLogo: 'Ajoutez un logo ou choisissez une offre design.',
+    designBanner: 'Une boutique professionnelle : nous créons votre logo, couverture et description dès 150 DH', designGo: 'Commander',
+    designQ: 'Pas de logo ni de photos pro ?', designHint: 'Choisissez une offre design, nous vous contacterons sur WhatsApp. Le logo peut rester vide.',
+    designPlans: [['', 'Non, j’ai mon logo et mes photos', '', ''], ['start', 'Offre Démarrage', 'Logo + couverture + présentation en arabe et en français', '150 DH'], ['identity', 'Offre Identité', 'Démarrage + retouche de 10 photos produits + descriptions pro', '350 DH'], ['ready', 'Boutique clé en main', 'Identité + mise en ligne de vos produits + affiche WhatsApp', '600 DH']],
+    designDone: 'Nous vous contacterons sur WhatsApp pour lancer le design.',
     brand: 'Khayrat Bladi', post: 'Déposer une annonce', heroTitle: 'Les trésors du Maroc, directement du producteur',
     heroSub: "Huile d'olive, miel, argan, dattes, fruits secs… des coopératives et producteurs de toutes les régions du Maroc.",
     searchPh: 'Rechercher : miel de thym, huile beldi, amlou…', allCities: 'Toutes les villes', all: 'Tout',
@@ -596,7 +619,11 @@ const T = {
     storeSubmit: 'Request my store', storeDoneTitle: 'Request received!', storeDoneText: 'We will contact you on WhatsApp to confirm and activate your store.',
     limitNote: 'Free account: up to 5 ads per phone number. Lots of products?',
     errLimit: 'Free limit reached (5 ads). Open a store to publish unlimited products.',
-    errExists: 'A store is already active with this number. Add your products via “Post an ad”.', errLogo: 'Please add a logo or photo.',
+    errExists: 'A store is already active with this number. Add your products via “Post an ad”.', errLogo: 'Please add a logo or choose a design package.',
+    designBanner: 'A professional store: we design your logo, cover and description from 150 MAD', designGo: 'Order',
+    designQ: 'No logo or professional photos?', designHint: 'Pick a design package and we will contact you on WhatsApp. You can leave the logo empty.',
+    designPlans: [['', 'No, I have my logo and photos', '', ''], ['start', 'Starter', 'Logo + cover + bio in Arabic and French', '150 MAD'], ['identity', 'Identity', 'Starter + 10 product photos retouched + pro descriptions', '350 MAD'], ['ready', 'Ready-made store', 'Identity + we add your products + WhatsApp poster', '600 MAD']],
+    designDone: 'We will contact you on WhatsApp to start the design.',
     brand: 'Khayrat Bladi', post: 'Post an ad', heroTitle: "Morocco's finest, straight from the producer",
     heroSub: 'Olive oil, wild honey, argan, dates, dried fruits… from cooperatives and producers across every region of Morocco.',
     searchPh: 'Search: thyme honey, beldi olive oil, amlou…', allCities: 'All cities', all: 'All',
@@ -682,6 +709,8 @@ function setLang(l) {
   document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
   $('#termsBody').innerHTML = t('termsHtml');
   $('#plansBox').innerHTML = t('plansHtml');
+  const cur = ($('#storeForm') && $('#storeForm').design) ? $('#storeForm').design.value : '';
+  $('#designOpts').innerHTML = t('designPlans').map(p => '<label class="design-opt"><input type="radio" name="design" value="' + esc(p[0]) + '"' + (p[0] === cur ? ' checked' : '') + '><span><b>' + esc(p[1]) + '</b>' + (p[2] ? '<small>' + esc(p[2]) + '</small>' : '') + '</span>' + (p[3] ? '<span class="price">' + esc(p[3]) + '</span>' : '') + '</label>').join('');
   $('#adminContact').innerHTML = ADMIN_WHATSAPP ? esc(t('contactAdmin')) + '<a href="https://wa.me/' + esc(ADMIN_WHATSAPP) + '" target="_blank" rel="noopener" dir="ltr">+' + esc(ADMIN_WHATSAPP) + '</a>' : '';
   fillSelects();
   renderStores(); renderCats(); renderGrid();
@@ -908,7 +937,7 @@ document.addEventListener('click', e => {
   else if (e.target.classList.contains('modal')) hideModal(e.target);
   else if (e.target.closest('[data-terms]')) showModal('#termsModal');
   else if (e.target.closest('[data-store]')) openStore(e.target.closest('[data-store]').dataset.store);
-  else if (e.target.closest('[data-openstore]')) { document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden')); showModal('#storeModal'); }
+  else if (e.target.closest('[data-openstore]')) { document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden')); showModal('#storeModal'); if (e.target.closest('[data-design]')) { const r = document.querySelector('#designOpts input[value="start"]'); if (r) r.checked = true; } }
   else if (e.target.closest('#detailSheet .card')) openDetail(e.target.closest('.card').dataset.id);
 });
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { const ms = [...document.querySelectorAll('.modal:not(.hidden)')]; if (ms.length) hideModal(ms[ms.length - 1]); } });
@@ -1019,15 +1048,16 @@ $('#storeForm').onsubmit = async e => {
   e.preventDefault();
   const f = e.target, msg = $('#storeMsg'), btn = $('#storeSubmit');
   const data = Object.fromEntries(new FormData(f).entries());
-  if (!S.logo) return showMsg(msg, 'err', t('errLogo'));
+  const design = data.design || '';
+  if (!S.logo && !design) return showMsg(msg, 'err', t('errLogo'));
   if (!data.name.trim() || !data.city.trim()) return showMsg(msg, 'err', t('errRequired'));
   if (!validPhone(data.phone)) return showMsg(msg, 'err', t('errPhone'));
   if (!f.consent.checked) return showMsg(msg, 'err', t('errConsent'));
   btn.disabled = true; btn.textContent = t('sending'); msg.classList.add('hidden');
   try {
-    const r = await post({ action: 'store', ...data, consent: true, logo: S.logo, cover: S.cover || '' });
+    const r = await post({ action: 'store', ...data, consent: true, logo: S.logo || '', cover: S.cover || '', design });
     if (!r.ok) throw new Error(r.error);
-    $('#storeBody').innerHTML = '<div class="done"><div class="big">🏪</div><h2>' + esc(t('storeDoneTitle')) + '</h2><p>' + esc(t('storeDoneText')) + '</p>' + (r.demo ? '<p class="meta">' + esc(t('doneDemo')) + '</p>' : '') +
+    $('#storeBody').innerHTML = '<div class="done"><div class="big">🏪</div><h2>' + esc(t('storeDoneTitle')) + '</h2><p>' + esc(t('storeDoneText')) + '</p>' + (design ? '<p><b>' + esc(t('designDone')) + '</b></p>' : '') + (r.demo ? '<p class="meta">' + esc(t('doneDemo')) + '</p>' : '') +
       '<div class="row"><button class="btn btn-honey" data-close>' + esc(t('back')) + '</button></div></div>';
     S.logo = S.cover = null;
   } catch (err) {
