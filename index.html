@@ -772,7 +772,7 @@ function renderGrid() {
 }
 
 function renderStores() {
-  const list = S.stores.filter(st => storeItems(st).length).sort((a, b) => (b.founder - a.founder) || storeItems(b).length - storeItems(a).length);
+  const list = S.stores.slice().sort((a, b) => (b.founder - a.founder) || storeItems(b).length - storeItems(a).length);
   $('#storesSec').classList.toggle('hidden', !list.length);
   $('#stores').innerHTML = list.map(st => '<button class="store-card" data-store="' + esc(st.id) + '">' + logoHtml(st) +
     '<b>' + esc(st.name) + '</b><span class="meta">📍 ' + esc(st.city) + '</span><span class="meta">' + esc(t('productsN')(storeItems(st).length)) + '</span>' +
@@ -800,7 +800,7 @@ function openStore(id) {
       '<div class="row"><a class="btn btn-wa" href="https://wa.me/' + esc(st.phone) + '?text=' + waText + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a></div>' +
       '<div class="row"><a class="btn btn-ghost" href="tel:+' + esc(st.phone) + '">📞 ' + esc(t('call')) + '</a><button class="btn btn-ghost" id="shareStoreBtn">🔗 ' + esc(t('share')) + '</button></div>' +
       '<h4 style="margin:18px 0 0">' + esc(t('storeProducts')) + ' (' + items.length + ')</h4>' +
-      '<div class="store-grid">' + items.map(cardHtml).join('') + '</div>' +
+      (items.length ? '<div class="store-grid">' + items.map(cardHtml).join('') + '</div>' : '<p class="meta" style="text-align:center;padding:24px 0">' + esc({ar:'سيضيف البائع منتوجاته قريباً.',fr:'Le vendeur ajoutera bientôt ses produits.',en:'The seller will add products soon.'}[S.lang] || '') + '</p>') +
     '</div>';
   showModal('#detailModal');
   $('#detailSheet').scrollTop = 0;
