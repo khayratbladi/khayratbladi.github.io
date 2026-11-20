@@ -196,6 +196,23 @@
   .stars { color: var(--honey); letter-spacing: 1px; font-size: 13px; }
   .badge-v { color: var(--olive); font-weight: 700; font-size: 12px; background: #eef3e2; padding: 1px 7px; border-radius: 999px; }
   .empty { text-align: center; color: var(--muted); padding: 50px 10px; grid-column: 1 / -1; }
+  .founder { background: linear-gradient(135deg,#fff8e6,#fbf1d6); border: 2px solid #e2c27a; border-radius: 18px; padding: 18px 20px; margin: 18px 0 6px; display: grid; gap: 14px; grid-template-columns: 1fr auto; align-items: center; }
+  .founder h2 { margin: 0 0 4px; font-size: 20px; color: var(--olive-dark); }
+  .founder .left { font-weight: 800; color: #b4720f; font-size: 15px; }
+  .founder ul { margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: 14px; color: #4b4b3f; }
+  .founder .acts { display: flex; flex-direction: column; gap: 8px; min-width: 230px; }
+  .founder .acts .btn { justify-content: center; text-align: center; }
+  .fbar { height: 7px; background: #eadbb4; border-radius: 9px; overflow: hidden; margin-top: 8px; max-width: 360px; }
+  .fbar i { display: block; height: 100%; background: #c8962b; }
+  .invite { grid-column: 1 / -1; text-align: center; background: #fff; border: 2px dashed #d9c79a; border-radius: 18px; padding: 34px 18px; }
+  .invite .ico { font-size: 40px; }
+  .invite h3 { margin: 8px 0 6px; color: var(--olive-dark); font-size: 20px; }
+  .invite p { color: var(--muted); margin: 0 0 16px; }
+  .invite .btn-wa { width: auto; font-size: 15px; padding: 10px 16px; }
+  .founder .btn-wa { font-size: 15px; padding: 11px 14px; }
+  .invite .row .btn { flex: 1 1 220px; max-width: 300px; justify-content: center; }
+  .invite .row { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
+  @media (max-width: 700px) { .founder { grid-template-columns: 1fr; } .founder .acts { min-width: 0; } }
 
   /* ===== النوافذ ===== */
   .modal { position: fixed; inset: 0; background: rgba(20, 18, 10, .55); z-index: 50; display: flex; align-items: flex-end; justify-content: center; }
@@ -407,6 +424,7 @@
 
 <main class="wrap">
   <div id="demoNote" class="demo-note hidden" data-t="demo">وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.</div>
+  <section class="founder hidden" id="founderBox"></section>
   <section class="stores-sec hidden" id="storesSec">
     <div class="sec-h"><h2 data-t="storesT">متاجر البائعين</h2></div>
     <div class="stores" id="stores"></div>
@@ -631,7 +649,8 @@
    الإعدادات – غيّر هذين السطرين فقط
    ===================================================================== */
 const API_URL = 'https://script.google.com/macros/s/AKfycbwwg5W5PQSxl-HL76jJeJgEZgnnT4aNWqRk7x2_VyYiUxz9IZI5pNbfG8Gw3ANMDp78UQ/exec';          // ضع هنا رابط Web app من Google Apps Script (ينتهي بـ /exec)
-const ADMIN_WHATSAPP = '';   // رقم واتساب الإدارة للتواصل (اختياري) مثل 2126XXXXXXXX
+const ADMIN_WHATSAPP = '212706600479';
+const FOUNDER_SLOTS = 50;   // رقم واتساب الإدارة للتواصل (اختياري) مثل 2126XXXXXXXX
 
 /* ===================================================================== */
 const MAX_PHOTOS = 6;
@@ -717,7 +736,7 @@ const T = {
     storeName: 'اسم المتجر', about: 'نبذة عن المتجر', aboutPh: 'من أنتم؟ ماذا تنتجون؟ منذ متى؟ كيف توصلون الطلبات؟',
     logo: 'الشعار أو صورة البائع', cover: 'صورة الغلاف', chooseLogo: 'اختر الشعار', chooseCover: 'اختر صورة الغلاف',
     storePhoneHint: 'نفس الرقم الذي تنشر به إعلاناتك: كل إعلاناتك ستظهر داخل المتجر.',
-    plansHtml: '<b>اشتراك المتجر</b><ul><li>عدد غير محدود من المنتوجات (بدل 5)</li><li>صفحة متجر خاصة برابط تشاركه مع زبنائك</li><li>وسم «متجر» على كل إعلاناتك، وظهور في «متاجر البائعين»</li></ul><b>99 درهم/شهر · 249 درهم/3 أشهر · 790 درهم/سنة</b><br>🎁 عرض الإطلاق: أول 30 متجراً مجاناً لمدة 3 أشهر (متجر مؤسس).',
+    plansHtml: '<b>اشتراك المتجر</b><ul><li>عدد غير محدود من المنتوجات (بدل 5)</li><li>صفحة متجر خاصة برابط تشاركه مع زبنائك</li><li>وسم «متجر» على كل إعلاناتك، وظهور في «متاجر البائعين»</li></ul><b>99 درهم/شهر · 249 درهم/3 أشهر · 790 درهم/سنة</b><br>🎁 عرض الإطلاق: أول 50 متجراً مجاناً لمدة 3 أشهر (متجر مؤسس).',
     storeSubmit: 'طلب فتح المتجر', storeDoneTitle: 'تم استلام طلب متجرك!', storeDoneText: 'سنتواصل معك عبر واتساب لتأكيد الاشتراك وتفعيل متجرك.',
     limitNote: 'الحساب المجاني: حتى 5 إعلانات لكل رقم هاتف. لديك منتوجات كثيرة؟',
     errLimit: 'وصلت إلى الحد المجاني (5 إعلانات). افتح متجراً لنشر عدد غير محدود من المنتوجات.',
@@ -761,6 +780,10 @@ const T = {
     doneDemo: '(وضع تجريبي: لم يُرسل الإعلان فعلياً.)', another: 'أضف إعلاناً آخر', back: 'العودة للإعلانات',
     footerAbout: 'منصة مجانية لعرض المنتوجات المحلية والمجالية المغربية. المنصة فضاء للعرض فقط: البيع والدفع والتوصيل يتم مباشرة بين البائع والمشتري.',
     contactAdmin: 'تواصل مع الإدارة عبر واتساب: ',
+    fTitle: '🌟 كن من البائعين المؤسسين لخيرات بلادي', fLeft: (n, m) => 'تبقّى ' + n + ' مكاناً من ' + m,
+    fPerks: ['✅ متجرك مجاني 3 أشهر', '⭐ شارة «متجر مؤسس»', '🔝 ظهور في أعلى الصفحة الرئيسية', '🤝 بدون أي عمولة على مبيعاتك'],
+    fSend: '📸 أرسل صور منتوجاتك ونضيفها لك', fWaMsg: 'السلام عليكم، أريد الانضمام إلى خيرات بلادي كبائع مؤسس. سأرسل لكم صور منتوجاتي وأثمنتها.',
+    invT: 'كن أول من يعرض منتوجاته هنا', invAll: 'المنصة في بدايتها، وأول البائعين يحصلون على أفضل ظهور.', invCat: c => 'لا توجد بعد منتوجات في صنف «' + c + '». كن أول بائع فيه!',
     termsHtml: '<p><b>خيرات بلادي</b> فضاء مجاني لعرض الإعلانات فقط، وليست طرفاً في أي عملية بيع أو دفع أو توصيل.</p><ul><li>البائع مسؤول عن صحة إعلانه وجودة منتوجه ومطابقته للقوانين المعمول بها، خاصة تراخيص المكتب الوطني للسلامة الصحية (ONSSA) للمنتوجات الغذائية.</li><li>يُمنع نشر منتوجات مغشوشة أو ادعاءات علاجية أو محتوى مسيء أو مخالف للقانون.</li><li>تخضع الإعلانات والتقييمات للمراجعة قبل النشر، وللإدارة حق حذف أي محتوى أو حساب مخالف.</li><li>رقم هاتف البائع يُنشر بموافقته للتواصل. أرقام المقيّمين لا تُنشر أبداً وتُستعمل فقط للتحقق.</li><li>ننصح المشترين بالتأكد من البائع وتقييماته قبل أي دفع.</li></ul>'
   },
   fr: {
@@ -769,7 +792,7 @@ const T = {
     storeName: 'Nom de la boutique', about: 'À propos', aboutPh: 'Qui êtes-vous ? Que produisez-vous ? Depuis quand ? Comment livrez-vous ?',
     logo: 'Logo ou photo du vendeur', cover: 'Photo de couverture', chooseLogo: 'Choisir le logo', chooseCover: 'Choisir la couverture',
     storePhoneHint: 'Le même numéro que vos annonces : toutes vos annonces apparaîtront dans la boutique.',
-    plansHtml: "<b>Abonnement boutique</b><ul><li>Produits illimités (au lieu de 5)</li><li>Une page boutique avec son lien à partager</li><li>Badge « Boutique » sur toutes vos annonces et place dans « Boutiques »</li></ul><b>99 DH/mois · 249 DH/3 mois · 790 DH/an</b><br>🎁 Offre de lancement : les 30 premières boutiques gratuites pendant 3 mois (boutique fondatrice).",
+    plansHtml: "<b>Abonnement boutique</b><ul><li>Produits illimités (au lieu de 5)</li><li>Une page boutique avec son lien à partager</li><li>Badge « Boutique » sur toutes vos annonces et place dans « Boutiques »</li></ul><b>99 DH/mois · 249 DH/3 mois · 790 DH/an</b><br>🎁 Offre de lancement : les 50 premières boutiques gratuites pendant 3 mois (boutique fondatrice).",
     storeSubmit: 'Demander ma boutique', storeDoneTitle: 'Demande reçue !', storeDoneText: 'Nous vous contacterons sur WhatsApp pour confirmer et activer votre boutique.',
     limitNote: "Compte gratuit : jusqu'à 5 annonces par numéro. Beaucoup de produits ?",
     errLimit: 'Limite gratuite atteinte (5 annonces). Ouvrez une boutique pour publier sans limite.',
@@ -813,6 +836,10 @@ const T = {
     doneDemo: "(Mode démo : l'annonce n'a pas été envoyée.)", another: 'Déposer une autre annonce', back: 'Retour aux annonces',
     footerAbout: "Plateforme gratuite d'annonces de produits du terroir marocain. La plateforme sert uniquement de vitrine : vente, paiement et livraison se font directement entre vendeur et acheteur.",
     contactAdmin: "Contacter l'équipe sur WhatsApp : ",
+    fTitle: '🌟 Devenez vendeur fondateur de Khayrat Bladi', fLeft: (n, m) => 'Il reste ' + n + ' places sur ' + m,
+    fPerks: ['✅ Boutique gratuite 3 mois', '⭐ Badge « Boutique fondatrice »', '🔝 Mise en avant sur la page d\'accueil', '🤝 Aucune commission sur vos ventes'],
+    fSend: '📸 Envoyez vos photos, on s\'occupe du reste', fWaMsg: 'Bonjour, je souhaite rejoindre Khayrat Bladi comme vendeur fondateur. Je vous envoie les photos et prix de mes produits.',
+    invT: 'Soyez le premier à exposer ici', invAll: 'La plateforme démarre : les premiers vendeurs ont la meilleure visibilité.', invCat: c => 'Aucun produit pour l\'instant dans « ' + c + ' ». Soyez le premier vendeur !',
     termsHtml: "<p><b>Khayrat Bladi</b> est un espace gratuit d'annonces et n'est partie à aucune vente, paiement ou livraison.</p><ul><li>Le vendeur est responsable de son annonce, de la qualité de son produit et de sa conformité à la loi, notamment aux autorisations ONSSA pour les produits alimentaires.</li><li>Sont interdits : produits frelatés, allégations thérapeutiques, contenus injurieux ou illégaux.</li><li>Annonces et avis sont vérifiés avant publication ; l'équipe peut supprimer tout contenu non conforme.</li><li>Le numéro du vendeur est publié avec son accord. Les numéros des personnes qui notent ne sont jamais publiés.</li><li>Nous conseillons aux acheteurs de vérifier le vendeur et ses avis avant tout paiement.</li></ul>"
   },
   en: {
@@ -821,7 +848,7 @@ const T = {
     storeName: 'Store name', about: 'About the store', aboutPh: 'Who are you? What do you produce? Since when? How do you deliver?',
     logo: 'Logo or seller photo', cover: 'Cover photo', chooseLogo: 'Choose logo', chooseCover: 'Choose cover photo',
     storePhoneHint: 'Use the same number as your ads: all your ads will appear in the store.',
-    plansHtml: '<b>Store subscription</b><ul><li>Unlimited products (instead of 5)</li><li>Your own store page with a link to share</li><li>“Store” badge on all your ads and a spot in “Seller stores”</li></ul><b>99 MAD/month · 249 MAD/3 months · 790 MAD/year</b><br>🎁 Launch offer: the first 30 stores free for 3 months (founding stores).',
+    plansHtml: '<b>Store subscription</b><ul><li>Unlimited products (instead of 5)</li><li>Your own store page with a link to share</li><li>“Store” badge on all your ads and a spot in “Seller stores”</li></ul><b>99 MAD/month · 249 MAD/3 months · 790 MAD/year</b><br>🎁 Launch offer: the first 50 stores free for 3 months (founding stores).',
     storeSubmit: 'Request my store', storeDoneTitle: 'Request received!', storeDoneText: 'We will contact you on WhatsApp to confirm and activate your store.',
     limitNote: 'Free account: up to 5 ads per phone number. Lots of products?',
     errLimit: 'Free limit reached (5 ads). Open a store to publish unlimited products.',
@@ -865,6 +892,10 @@ const T = {
     doneDemo: '(Demo mode: the ad was not actually sent.)', another: 'Post another ad', back: 'Back to ads',
     footerAbout: 'A free listings platform for Moroccan local and regional products. The platform only displays ads: sale, payment and delivery happen directly between seller and buyer.',
     contactAdmin: 'Contact the team on WhatsApp: ',
+    fTitle: '🌟 Become a founding seller of Khayrat Bladi', fLeft: (n, m) => n + ' of ' + m + ' spots left',
+    fPerks: ['✅ Free store for 3 months', '⭐ “Founding store” badge', '🔝 Featured on the home page', '🤝 No commission on your sales'],
+    fSend: '📸 Send your photos, we add them for you', fWaMsg: 'Hello, I would like to join Khayrat Bladi as a founding seller. I will send you my product photos and prices.',
+    invT: 'Be the first to sell here', invAll: 'The platform is just starting: early sellers get the best visibility.', invCat: c => 'No products in “' + c + '” yet. Be the first seller!',
     termsHtml: '<p><b>Khayrat Bladi</b> is a free space for listings only and is not a party to any sale, payment or delivery.</p><ul><li>Sellers are responsible for their ads, the quality of their products and compliance with the law, including ONSSA authorisation for food products.</li><li>Adulterated products, medical claims, abusive or illegal content are forbidden.</li><li>Ads and reviews are moderated before publication; the team may remove any non-compliant content.</li><li>The seller\'s phone number is published with their consent. Reviewers\' numbers are never published.</li><li>Buyers should check the seller and their reviews before any payment.</li></ul>'
   }
 };
@@ -1005,11 +1036,29 @@ function renderGrid() {
   if (!S.loaded) return;
   const list = filtered();
   $('#resultCount').textContent = t('results')(list.length);
-  if (!list.length) { $('#grid').innerHTML = '<div class="empty">' + esc(t('none')) + '</div>'; return; }
+  if (!list.length) { $('#grid').innerHTML = (S.q || S.city) ? '<div class="empty">' + esc(t('none')) + '</div>' : inviteHtml(); return; }
   $('#grid').innerHTML = list.map(cardHtml).join('');
 }
 
+function waAdmin() { return 'https://wa.me/' + ADMIN_WHATSAPP + '?text=' + encodeURIComponent(t('fWaMsg')); }
+function inviteHtml() {
+  const c = S.cat && CATS.find(x => x.id === S.cat);
+  return '<div class="invite"><div class="ico">' + (c ? c.ico : '🌱') + '</div><h3>' + esc(t('invT')) + '</h3><p>' + esc(c ? t('invCat')(c[S.lang]) : t('invAll')) + '</p><div class="row">' +
+    '<button type="button" class="btn btn-orange" data-addopen>＋ ' + esc(t('postFree')) + '</button>' +
+    (ADMIN_WHATSAPP ? '<a class="btn btn-wa" href="' + waAdmin() + '" target="_blank" rel="noopener">' + esc(t('fSend')) + '</a>' : '') + '</div></div>';
+}
+function renderFounder() {
+  const used = S.stores.filter(st => st.founder).length, left = Math.max(0, FOUNDER_SLOTS - used);
+  const box = $('#founderBox');
+  box.classList.toggle('hidden', !S.loaded || !left);
+  if (!left) return;
+  box.innerHTML = '<div><h2>' + esc(t('fTitle')) + '</h2><div class="left">' + esc(t('fLeft')(left, FOUNDER_SLOTS)) + '</div>' +
+    '<div class="fbar"><i style="width:' + Math.round(used / FOUNDER_SLOTS * 100) + '%"></i></div><ul>' + t('fPerks').map(x => '<li>' + esc(x) + '</li>').join('') + '</ul></div>' +
+    '<div class="acts"><button type="button" class="btn btn-orange" data-openstore>🏪 ' + esc(t('openStore')) + '</button>' +
+    (ADMIN_WHATSAPP ? '<a class="btn btn-wa" href="' + waAdmin() + '" target="_blank" rel="noopener">' + esc(t('fSend')) + '</a>' : '') + '</div>';
+}
 function renderStores() {
+  renderFounder();
   const list = S.stores.slice().sort((a, b) => (b.founder - a.founder) || storeItems(b).length - storeItems(a).length);
   $('#storesSec').classList.toggle('hidden', !list.length);
   $('#stores').innerHTML = list.map(st => '<button class="store-card" data-store="' + esc(st.id) + '">' + logoHtml(st) +
@@ -1150,6 +1199,7 @@ document.addEventListener('click', e => {
   else if (e.target.classList.contains('modal')) hideModal(e.target);
   else if (e.target.closest('[data-terms]')) showModal('#termsModal');
   else if (e.target.closest('[data-store]')) openStore(e.target.closest('[data-store]').dataset.store);
+  else if (e.target.closest('[data-addopen]')) showModal('#addModal');
   else if (e.target.closest('[data-openstore]')) { document.querySelectorAll('.modal:not(.hidden)').forEach(m => m.classList.add('hidden')); showModal('#storeModal'); if (e.target.closest('[data-design]')) { const r = document.querySelector('#designOpts input[value="start"]'); if (r) r.checked = true; } }
   else if (e.target.closest('#detailSheet .card')) openDetail(e.target.closest('.card').dataset.id);
 });
