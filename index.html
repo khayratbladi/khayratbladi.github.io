@@ -82,6 +82,8 @@
   .hero .search input, .hero .search select { border: 1px solid var(--line); }
   .btn-orange { background: #e8731a; color: #fff; }
   .btn-orange:hover { background: #d5650f; }
+  .btn-big { font-size: 17px; padding: 13px 22px; box-shadow: 0 4px 14px rgba(232,115,26,.35); }
+  .owner-box { margin-top: 16px; padding: 12px 14px; border: 1.5px dashed var(--olive); border-radius: 12px; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #f6f8ef; font-weight: 700; color: var(--olive-dark); }
   .btn-outline-olive { background: #fff; color: var(--olive-dark); border: 1.5px solid var(--olive); }
   .hero-badges { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; font-weight: 700; color: var(--olive-dark); }
   .hero-badges li { display: flex; align-items: center; gap: 6px; }
@@ -228,9 +230,23 @@
   .done { text-align: center; padding: 30px 16px; }
   .done .big { font-size: 60px; }
 
-  footer { background: var(--olive-dark); color: #e8e4d6; padding: 26px 0; font-size: 14px; }
-  footer a, footer .linkbtn { color: #fff; }
-  footer .wrap { display: grid; gap: 8px; }
+  footer { background: var(--olive-dark); color: #dcd8c8; font-size: 14px; margin-top: 30px; }
+  footer a, footer .linkbtn { color: #f3efe2; }
+  footer a:hover, footer .linkbtn:hover { color: var(--honey); }
+  .foot-grid { display: grid; grid-template-columns: 1.6fr 1fr 1fr 1.2fr; gap: 28px; padding-top: 38px; padding-bottom: 30px; }
+  .foot-logo { font-family: 'Aref Ruqaa', 'Tajawal', serif; font-weight: 700; font-size: 40px; color: #fff; line-height: 1.1; }
+  .foot-lat { color: var(--honey); letter-spacing: 3px; font-weight: 800; font-size: 13px; margin-bottom: 10px; }
+  .foot-brand p { margin: 0; line-height: 1.8; max-width: 380px; }
+  footer h4 { color: #fff; margin: 4px 0 12px; font-size: 16px; position: relative; padding-bottom: 8px; }
+  footer h4::after { content: ""; position: absolute; bottom: 0; inset-inline-start: 0; width: 32px; height: 3px; border-radius: 3px; background: var(--honey); }
+  .foot-links { list-style: none; margin: 0; padding: 0; display: grid; gap: 9px; }
+  .foot-links .linkbtn { text-decoration: none; font-size: 14px; padding: 0; text-align: start; }
+  .foot-plain li::before { content: "✓ "; color: var(--honey); font-weight: 800; }
+  .foot-plain li#adminContact::before { content: none; }
+  .foot-bottom { border-top: 1px solid rgba(255,255,255,.12); background: rgba(0,0,0,.12); font-size: 13px; }
+  .foot-bottom .wrap { display: flex; justify-content: space-between; gap: 8px 18px; flex-wrap: wrap; padding-top: 14px; padding-bottom: 14px; }
+  @media (max-width: 860px) { .foot-grid { grid-template-columns: 1fr 1fr; } .foot-brand { grid-column: 1 / -1; } }
+  @media (max-width: 480px) { .foot-grid { grid-template-columns: 1fr; gap: 22px; } }
 
   .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; z-index: 80; font-size: 14px; }
   .spinner { width: 34px; height: 34px; border: 4px solid var(--line); border-top-color: var(--olive); border-radius: 50%; animation: spin 1s linear infinite; margin: 50px auto; grid-column: 1 / -1; }
@@ -280,8 +296,12 @@
 
   @media (max-width: 420px) {
     .brand small { display: none; }
-    .top .btn-honey span.lbl-long { display: none; }
+    .top .btn-honey { padding: 7px 10px; font-size: 13px; }
+    .brand b { font-size: 16px; }
+    .brand .mark { flex: none; width: 34px; height: 34px; }
+    .lang button { padding: 4px 7px; }
   }
+  @media (max-width: 380px) { .brand b { display: none; } }
 </style>
 </head>
 <body>
@@ -314,7 +334,8 @@
         <select id="cityFilter" aria-label="city"></select>
       </div>
       <div class="hero-cta">
-        <button type="button" class="btn btn-orange" id="discoverBtn"><span data-t="discover">اكتشف المنتوجات</span></button>
+        <button type="button" class="btn btn-orange btn-big" id="heroAddBtn">＋ <span data-t="postFree">أضف إعلانك مجاناً</span></button>
+        <button type="button" class="btn btn-olive" id="discoverBtn"><span data-t="discover">اكتشف المنتوجات</span></button>
         <button class="btn btn-outline-olive" data-openstore>🏪 <span data-t="openStore">افتح متجرك</span></button>
       </div>
       <ul class="hero-badges">
@@ -346,11 +367,36 @@
 </main>
 
 <footer>
-  <div class="wrap">
-    <b data-t="brand">خيرات بلادي</b>
-    <span data-t="footerAbout">منصة مجانية لعرض المنتوجات المحلية والمجالية المغربية. المنصة فضاء للعرض فقط: البيع والدفع والتوصيل يتم مباشرة بين البائع والمشتري.</span>
-    <span><button class="linkbtn" data-openstore data-t="openStore">افتح متجرك</button> · <button class="linkbtn" id="termsLink" data-t="terms">شروط الاستخدام</button></span>
-    <span id="adminContact"></span>
+  <div class="wrap foot-grid">
+    <div class="foot-brand">
+      <div class="foot-logo">خيرات بلادي</div>
+      <div class="foot-lat">KHAYRAT BLADI</div>
+      <p data-t="footerAbout">منصة مجانية لعرض المنتوجات المحلية والمجالية المغربية. المنصة فضاء للعرض فقط: البيع والدفع والتوصيل يتم مباشرة بين البائع والمشتري.</p>
+    </div>
+    <div>
+      <h4 data-t="footSellers">للبائعين</h4>
+      <ul class="foot-links">
+        <li><button class="linkbtn" data-footadd data-t="post">أضف إعلانك</button></li>
+        <li><button class="linkbtn" data-openstore data-t="openStore">افتح متجرك</button></li>
+        <li><button class="linkbtn" id="termsLink" data-t="terms">شروط الاستخدام</button></li>
+      </ul>
+    </div>
+    <div>
+      <h4 data-t="footCats">الأصناف</h4>
+      <ul class="foot-links" id="footCats"></ul>
+    </div>
+    <div>
+      <h4 data-t="footWhy">لماذا خيرات بلادي؟</h4>
+      <ul class="foot-links foot-plain">
+        <li data-t="badge1">منتوجات مغربية أصيلة</li>
+        <li data-t="badge2">دعم التعاونيات</li>
+        <li data-t="badge3">تواصل مباشر مع البائع</li>
+        <li id="adminContact"></li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot-bottom">
+    <div class="wrap"><span>© <span id="footYear">2026</span> <span data-t="brand">خيرات بلادي</span> · <span data-t="rights">جميع الحقوق محفوظة</span></span><span data-t="madeIn">صُنع بالمغرب، لخدمة المنتوج المحلي</span></div>
   </div>
 </footer>
 
@@ -565,6 +611,7 @@ const T = {
     designDone: 'سنتواصل معك عبر واتساب لبدء التصميم.',
     brand: 'خيرات بلادي', post: 'أضف إعلانك', heroTitle: 'خيرات بلادنا، من المنتج إليك مباشرة',
     heroSub: 'زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.',
+    postFree: 'أضف إعلانك مجاناً', ownerQ: 'هل أنت صاحب هذا المتجر؟', addToStore: 'أضف منتوجاً إلى متجري', footSellers: 'للبائعين', footCats: 'الأصناف', footWhy: 'لماذا خيرات بلادي؟', rights: 'جميع الحقوق محفوظة', madeIn: 'صُنع بالمغرب، لخدمة المنتوج المحلي',
     heroBand: 'دعم للمنتوج المحلي… تنمية لمجتمعنا', discover: 'اكتشف المنتوجات', badge1: 'منتوجات مغربية أصيلة', badge2: 'دعم التعاونيات', badge3: 'تواصل مباشر مع البائع',
     searchPh: 'ابحث: عسل الزعتر، زيت بلدي، أملو…', allCities: 'كل المدن', all: 'الكل',
     demo: 'وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.',
@@ -614,6 +661,7 @@ const T = {
     designDone: 'Nous vous contacterons sur WhatsApp pour lancer le design.',
     brand: 'Khayrat Bladi', post: 'Déposer une annonce', heroTitle: 'Les trésors du Maroc, directement du producteur',
     heroSub: "Huile d'olive, miel, argan, dattes, fruits secs… des coopératives et producteurs de toutes les régions du Maroc.",
+    postFree: 'Publier une annonce gratuite', ownerQ: 'Vous êtes le propriétaire de cette boutique ?', addToStore: 'Ajouter un produit à ma boutique', footSellers: 'Vendeurs', footCats: 'Catégories', footWhy: 'Pourquoi Khayrat Bladi ?', rights: 'Tous droits réservés', madeIn: 'Fait au Maroc, au service du produit local',
     heroBand: 'Soutenir le produit local… développer notre communauté', discover: 'Découvrir les produits', badge1: 'Produits marocains authentiques', badge2: 'Soutien aux coopératives', badge3: 'Contact direct avec le vendeur',
     searchPh: 'Rechercher : miel de thym, huile beldi, amlou…', allCities: 'Toutes les villes', all: 'Tout',
     demo: 'Mode démo : les annonces affichées sont des exemples. Connectez la plateforme à Google Sheets pour afficher les vraies annonces.',
@@ -663,6 +711,7 @@ const T = {
     designDone: 'We will contact you on WhatsApp to start the design.',
     brand: 'Khayrat Bladi', post: 'Post an ad', heroTitle: "Morocco's finest, straight from the producer",
     heroSub: 'Olive oil, wild honey, argan, dates, dried fruits… from cooperatives and producers across every region of Morocco.',
+    postFree: 'Post a free ad', ownerQ: 'Do you own this store?', addToStore: 'Add a product to my store', footSellers: 'For sellers', footCats: 'Categories', footWhy: 'Why Khayrat Bladi?', rights: 'All rights reserved', madeIn: 'Made in Morocco, for local products',
     heroBand: 'Supporting local products… growing our community', discover: 'Discover products', badge1: 'Authentic Moroccan products', badge2: 'Supporting cooperatives', badge3: 'Direct contact with the seller',
     searchPh: 'Search: thyme honey, beldi olive oil, amlou…', allCities: 'All cities', all: 'All',
     demo: 'Demo mode: the ads shown are examples. Connect the platform to Google Sheets to show real ads.',
@@ -749,6 +798,7 @@ function setLang(l) {
   $('#plansBox').innerHTML = t('plansHtml');
   $('#adminContact').innerHTML = ADMIN_WHATSAPP ? esc(t('contactAdmin')) + '<a href="https://wa.me/' + esc(ADMIN_WHATSAPP) + '" target="_blank" rel="noopener" dir="ltr">+' + esc(ADMIN_WHATSAPP) + '</a>' : '';
   fillSelects();
+  $('#footCats').innerHTML = CATS.filter(c => c.id !== 'other').slice(0, 7).map(c => '<li><button class="linkbtn" data-footcat="' + c.id + '">' + c.ico + ' ' + esc(c[S.lang]) + '</button></li>').join('');
   renderStores(); renderCats(); renderGrid();
   if (!$('#detailModal').classList.contains('hidden') && S.openId) openDetail(S.openId);
   else if (!$('#detailModal').classList.contains('hidden') && S.openStore) openStore(S.openStore);
@@ -864,6 +914,7 @@ function openStore(id) {
       (st.about ? '<p class="desc">' + esc(st.about) + '</p>' : '') +
       '<div class="row"><a class="btn btn-wa" href="https://wa.me/' + esc(st.phone) + '?text=' + waText + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a></div>' +
       '<div class="row"><a class="btn btn-ghost" href="tel:+' + esc(st.phone) + '">📞 ' + esc(t('call')) + '</a><button class="btn btn-ghost" id="shareStoreBtn">🔗 ' + esc(t('share')) + '</button></div>' +
+      '<div class="owner-box"><span>' + esc(t('ownerQ')) + '</span><button type="button" class="btn btn-olive" id="addToStoreBtn">＋ ' + esc(t('addToStore')) + '</button></div>' +
       '<h4 style="margin:18px 0 0">' + esc(t('storeProducts')) + ' (' + items.length + ')</h4>' +
       (items.length ? '<div class="store-grid">' + items.map(cardHtml).join('') + '</div>' : '<p class="meta" style="text-align:center;padding:24px 0">' + esc({ar:'سيضيف البائع منتوجاته قريباً.',fr:'Le vendeur ajoutera bientôt ses produits.',en:'The seller will add products soon.'}[S.lang] || '') + '</p>') +
     '</div>';
@@ -871,6 +922,15 @@ function openStore(id) {
   $('#detailSheet').scrollTop = 0;
   try { if (location.hash !== '#store-' + id) history.replaceState(null, '', '#store-' + id); } catch (e) {}
   $('#shareStoreBtn').onclick = () => shareLink('#store-' + id, st.name);
+  $('#addToStoreBtn').onclick = () => {
+    hideModal($('#detailModal'));
+    $('#f_seller').value = st.name || '';
+    if (st.stype) $('#f_stype').value = st.stype;
+    $('#f_city').value = st.city || '';
+    const p = String(st.phone || '');
+    $('#f_phone').value = p.indexOf('212') === 0 ? '0' + p.slice(3) : p;
+    showModal('#addModal');
+  };
 }
 
 /* ---------- الفيديو ---------- */
@@ -1080,6 +1140,13 @@ function pickOne(btn, input, prev, key, max) {
 pickOne('#logoBtn', '#logoInput', '#logoPrev', 'logo', 600);
 pickOne('#coverBtn', '#coverInput', '#coverPrev', 'cover', 1600);
 
+$('#heroAddBtn').onclick = () => showModal('#addModal');
+document.querySelector('footer').addEventListener('click', e => {
+  if (e.target.closest('[data-footadd]')) showModal('#addModal');
+  const c = e.target.closest('[data-footcat]');
+  if (c) { S.cat = c.dataset.footcat; renderCats(); renderGrid(); $('#cats').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+});
+try { $('#footYear').textContent = new Date().getFullYear(); } catch (e) {}
 $('#discoverBtn').onclick = () => $('#cats').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 $('#storeForm').onsubmit = async e => {
