@@ -83,6 +83,27 @@
   .btn-orange { background: #e8731a; color: #fff; }
   .btn-orange:hover { background: #d5650f; }
   .btn-big { font-size: 17px; padding: 13px 22px; box-shadow: 0 4px 14px rgba(232,115,26,.35); }
+  .acc-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: none; color: #fff; display: grid; place-items: center; flex: none; position: relative; cursor: pointer; padding: 0; }
+  .acc-btn.on::after { content: ""; position: absolute; top: 1px; inset-inline-end: 1px; width: 9px; height: 9px; border-radius: 50%; background: #3ddc6a; border: 2px solid var(--olive-dark); }
+  .dash-head { display: flex; gap: 12px; align-items: center; }
+  .dash-head .logo { width: 56px; height: 56px; border-radius: 50%; overflow: hidden; background: var(--olive); color: #fff; display: grid; place-items: center; font-weight: 800; font-size: 22px; flex: none; }
+  .dash-head .logo img { width: 100%; height: 100%; object-fit: cover; }
+  .dash-head b { font-size: 18px; display: block; }
+  .dash-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0; }
+  .dash-actions .btn-big { grid-column: 1 / -1; }
+  .my-item { display: flex; gap: 10px; align-items: center; padding: 10px 0; border-bottom: 1px solid #eee5cf; }
+  .my-item img, .my-item .ph0 { width: 58px; height: 58px; border-radius: 10px; object-fit: cover; background: #f1ead6; flex: none; display: grid; place-items: center; font-size: 22px; }
+  .my-item .info { flex: 1; min-width: 0; }
+  .my-item .info b { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .my-item .acts { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .my-item .acts button { border: 1px solid #d9cfb4; background: #fff; border-radius: 999px; padding: 5px 10px; font: inherit; font-size: 13px; font-weight: 700; cursor: pointer; }
+  .my-item .acts .danger { color: #9b3415; border-color: #e7b9a9; }
+  .chip { display: inline-block; border-radius: 999px; padding: 1px 9px; font-size: 12px; font-weight: 700; margin-top: 3px; }
+  .chip.live { background: #e6f4e9; color: #1e6b33; } .chip.pending { background: #fff3d6; color: #8a5a00; } .chip.sold { background: #eee; color: #555; }
+  .sold-tag { position: absolute; top: 8px; inset-inline-start: 8px; background: rgba(40,40,40,.85); color: #fff; font-weight: 800; font-size: 12px; padding: 3px 10px; border-radius: 999px; }
+  .card.is-sold img { filter: grayscale(.7); opacity: .75; }
+  .edit-store { margin-top: 18px; border: 1px solid #eadfc4; border-radius: 12px; padding: 4px 14px; }
+  .edit-store summary { cursor: pointer; font-weight: 800; padding: 10px 0; color: var(--olive-dark); }
   .owner-box { margin-top: 16px; padding: 12px 14px; border: 1.5px dashed var(--olive); border-radius: 12px; display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; background: #f6f8ef; font-weight: 700; color: var(--olive-dark); }
   .btn-outline-olive { background: #fff; color: var(--olive-dark); border: 1.5px solid var(--olive); }
   .hero-badges { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; font-weight: 700; color: var(--olive-dark); }
@@ -301,7 +322,7 @@
     .brand .mark { flex: none; width: 34px; height: 34px; }
     .lang button { padding: 4px 7px; }
   }
-  @media (max-width: 380px) { .brand b { display: none; } }
+  @media (max-width: 440px) { .brand b { display: none; } }
 </style>
 </head>
 <body>
@@ -318,6 +339,7 @@
     <div class="lang" role="group" aria-label="Language">
       <button data-lang="ar">ع</button><button data-lang="fr">FR</button><button data-lang="en">EN</button>
     </div>
+    <button class="acc-btn" id="accBtn" type="button" aria-label="حسابي"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg></button>
     <button class="btn btn-honey" id="addBtn">＋ <span class="lbl-long" data-t="post">أضف إعلانك</span></button>
   </div>
 </header>
@@ -378,6 +400,7 @@
       <ul class="foot-links">
         <li><button class="linkbtn" data-footadd data-t="post">أضف إعلانك</button></li>
         <li><button class="linkbtn" data-openstore data-t="openStore">افتح متجرك</button></li>
+        <li><button class="linkbtn" data-footacc data-t="aLoginLink">دخول أصحاب المتاجر</button></li>
         <li><button class="linkbtn" id="termsLink" data-t="terms">شروط الاستخدام</button></li>
       </ul>
     </div>
@@ -545,6 +568,15 @@
   </div>
 </div>
 
+<!-- ===== حساب البائع ===== -->
+<div class="modal hidden" id="accModal" role="dialog" aria-modal="true">
+  <div class="sheet">
+    <div class="sheet-head"><h2 data-t="aTitle">حسابي</h2><button class="x" data-close aria-label="close">×</button></div>
+    <div class="pad" id="accBody"></div>
+    <input type="file" id="eLogoInput" accept="image/*" hidden><input type="file" id="eCoverInput" accept="image/*" hidden>
+  </div>
+</div>
+
 <!-- ===== نافذة الشروط ===== -->
 <div class="modal hidden" id="termsModal" role="dialog" aria-modal="true">
   <div class="sheet">
@@ -612,6 +644,7 @@ const T = {
     brand: 'خيرات بلادي', post: 'أضف إعلانك', heroTitle: 'خيرات بلادنا، من المنتج إليك مباشرة',
     heroSub: 'زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.',
     postFree: 'أضف إعلانك مجاناً', ownerQ: 'هل أنت صاحب هذا المتجر؟', addToStore: 'أضف منتوجاً إلى متجري', footSellers: 'للبائعين', footCats: 'الأصناف', footWhy: 'لماذا خيرات بلادي؟', rights: 'جميع الحقوق محفوظة', madeIn: 'صُنع بالمغرب، لخدمة المنتوج المحلي',
+    aTitle: 'حسابي', aLoginLink: 'دخول أصحاب المتاجر', aLoginTitle: 'دخول صاحب المتجر', aPhone: 'رقم الهاتف (واتساب المتجر)', aPin: 'رمز الدخول (6 أرقام)', aLoginBtn: 'دخول', aHint: 'يصلك رمز الدخول عبر واتساب من إدارة المنصة بعد الموافقة على متجرك. نسيت الرمز؟ راسل الإدارة لإرسال رمز جديد.', aNoStore: 'ليس لديك متجر بعد؟', aWelcome: 'مرحباً بك في متجرك', aAdd: 'أضف منتوجاً إلى متجري', aView: 'عرض متجري', aOut: 'خروج', aMine: 'منتوجاتي', aEmpty: 'لم تُضف أي منتوج بعد. ابدأ بإضافة منتوجك الأول.', aLoading: 'جارٍ التحميل…', stLive: 'منشور', stPending: 'في المراجعة', stSold: 'نفد', aSold: 'نفد', aAvail: 'متوفر', aDel: 'حذف', aDelSure: 'تأكيد الحذف؟', aEdit: 'تعديل معلومات المتجر', aCity: 'المدينة', aAbout: 'نبذة عن المتجر', aLogo: 'تغيير الشعار', aCover: 'تغيير الغلاف', aSave: 'حفظ التعديلات', aSaved: 'تم الحفظ ✓ تظهر التعديلات في الموقع خلال دقيقة.', ownerLogin: 'دخول صاحب المتجر', soldOut: 'نفد', errStorePhone: 'هذا الرقم مرتبط بمتجر. ادخل إلى حسابك أولاً (أيقونة 👤 أعلى الصفحة) ثم أضف منتوجك من هناك.', errBadLogin: 'رقم الهاتف أو رمز الدخول غير صحيح.', errLocked: 'محاولات كثيرة خاطئة. أعد المحاولة بعد ساعة.', errAuth: 'انتهت الجلسة. ادخل من جديد.', errPin: 'رمز الدخول يتكوّن من 6 أرقام.',
     heroBand: 'دعم للمنتوج المحلي… تنمية لمجتمعنا', discover: 'اكتشف المنتوجات', badge1: 'منتوجات مغربية أصيلة', badge2: 'دعم التعاونيات', badge3: 'تواصل مباشر مع البائع',
     searchPh: 'ابحث: عسل الزعتر، زيت بلدي، أملو…', allCities: 'كل المدن', all: 'الكل',
     demo: 'وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.',
@@ -662,6 +695,7 @@ const T = {
     brand: 'Khayrat Bladi', post: 'Déposer une annonce', heroTitle: 'Les trésors du Maroc, directement du producteur',
     heroSub: "Huile d'olive, miel, argan, dattes, fruits secs… des coopératives et producteurs de toutes les régions du Maroc.",
     postFree: 'Publier une annonce gratuite', ownerQ: 'Vous êtes le propriétaire de cette boutique ?', addToStore: 'Ajouter un produit à ma boutique', footSellers: 'Vendeurs', footCats: 'Catégories', footWhy: 'Pourquoi Khayrat Bladi ?', rights: 'Tous droits réservés', madeIn: 'Fait au Maroc, au service du produit local',
+    aTitle: 'Mon compte', aLoginLink: 'Espace boutiques', aLoginTitle: 'Connexion vendeur', aPhone: 'Téléphone (WhatsApp de la boutique)', aPin: 'Code d’accès (6 chiffres)', aLoginBtn: 'Se connecter', aHint: 'Vous recevez votre code par WhatsApp après validation de votre boutique. Code oublié ? Contactez l’administration.', aNoStore: 'Pas encore de boutique ?', aWelcome: 'Bienvenue dans votre boutique', aAdd: 'Ajouter un produit à ma boutique', aView: 'Voir ma boutique', aOut: 'Déconnexion', aMine: 'Mes produits', aEmpty: 'Aucun produit pour le moment. Ajoutez votre premier produit.', aLoading: 'Chargement…', stLive: 'Publié', stPending: 'En validation', stSold: 'Épuisé', aSold: 'Épuisé', aAvail: 'Disponible', aDel: 'Supprimer', aDelSure: 'Confirmer ?', aEdit: 'Modifier la boutique', aCity: 'Ville', aAbout: 'Présentation', aLogo: 'Changer le logo', aCover: 'Changer la couverture', aSave: 'Enregistrer', aSaved: 'Enregistré ✓ Visible sur le site d’ici une minute.', ownerLogin: 'Connexion du propriétaire', soldOut: 'Épuisé', errStorePhone: 'Ce numéro appartient à une boutique. Connectez-vous d’abord (icône 👤 en haut) puis ajoutez votre produit.', errBadLogin: 'Téléphone ou code incorrect.', errLocked: 'Trop d’essais. Réessayez dans une heure.', errAuth: 'Session expirée. Reconnectez-vous.', errPin: 'Le code contient 6 chiffres.',
     heroBand: 'Soutenir le produit local… développer notre communauté', discover: 'Découvrir les produits', badge1: 'Produits marocains authentiques', badge2: 'Soutien aux coopératives', badge3: 'Contact direct avec le vendeur',
     searchPh: 'Rechercher : miel de thym, huile beldi, amlou…', allCities: 'Toutes les villes', all: 'Tout',
     demo: 'Mode démo : les annonces affichées sont des exemples. Connectez la plateforme à Google Sheets pour afficher les vraies annonces.',
@@ -712,6 +746,7 @@ const T = {
     brand: 'Khayrat Bladi', post: 'Post an ad', heroTitle: "Morocco's finest, straight from the producer",
     heroSub: 'Olive oil, wild honey, argan, dates, dried fruits… from cooperatives and producers across every region of Morocco.',
     postFree: 'Post a free ad', ownerQ: 'Do you own this store?', addToStore: 'Add a product to my store', footSellers: 'For sellers', footCats: 'Categories', footWhy: 'Why Khayrat Bladi?', rights: 'All rights reserved', madeIn: 'Made in Morocco, for local products',
+    aTitle: 'My account', aLoginLink: 'Store owners login', aLoginTitle: 'Store owner login', aPhone: 'Phone (store WhatsApp)', aPin: 'Access code (6 digits)', aLoginBtn: 'Log in', aHint: 'You receive your code on WhatsApp once your store is approved. Forgot it? Contact the admin.', aNoStore: 'No store yet?', aWelcome: 'Welcome to your store', aAdd: 'Add a product to my store', aView: 'View my store', aOut: 'Log out', aMine: 'My products', aEmpty: 'No products yet. Add your first one.', aLoading: 'Loading…', stLive: 'Live', stPending: 'Under review', stSold: 'Sold out', aSold: 'Sold out', aAvail: 'Available', aDel: 'Delete', aDelSure: 'Confirm?', aEdit: 'Edit store info', aCity: 'City', aAbout: 'About the store', aLogo: 'Change logo', aCover: 'Change cover', aSave: 'Save changes', aSaved: 'Saved ✓ Visible on the site within a minute.', ownerLogin: 'Store owner login', soldOut: 'Sold out', errStorePhone: 'This number belongs to a store. Log in first (👤 icon at the top), then add your product from there.', errBadLogin: 'Wrong phone number or code.', errLocked: 'Too many attempts. Try again in an hour.', errAuth: 'Session expired. Please log in again.', errPin: 'The code has 6 digits.',
     heroBand: 'Supporting local products… growing our community', discover: 'Discover products', badge1: 'Authentic Moroccan products', badge2: 'Supporting cooperatives', badge3: 'Direct contact with the seller',
     searchPh: 'Search: thyme honey, beldi olive oil, amlou…', allCities: 'All cities', all: 'All',
     demo: 'Demo mode: the ads shown are examples. Connect the platform to Google Sheets to show real ads.',
@@ -868,8 +903,8 @@ function photoBlock(l, cls) {
 
 function cardHtml(l) {
   const r = sellerRating(l), st = storeOf(l);
-  return '<button class="card" data-id="' + esc(l.id) + '">' +
-    '<div class="ph">' + photoBlock(l) + (l.featured ? '<span class="ribbon">' + esc(t('featured')) + '</span>' : '') +
+  return '<button class="card' + (l.sold ? ' is-sold' : '') + '" data-id="' + esc(l.id) + '">' +
+    '<div class="ph">' + photoBlock(l) + (l.sold ? '<span class="sold-tag">' + esc(t('soldOut')) + '</span>' : '') + (l.featured ? '<span class="ribbon">' + esc(t('featured')) + '</span>' : '') +
     (l.photos && l.photos.length > 1 ? '<span class="count">📷 ' + l.photos.length + '</span>' : '') +
     (st ? '<span class="store-tag">' + esc(t('storeBadge')) + '</span>' : (l.video ? '<span class="count" style="inset-inline-end:auto;inset-inline-start:8px">▶</span>' : '')) + '</div>' +
     '<div class="body"><h3>' + esc(l.title) + '</h3><div class="price">' + esc(priceStr(l)) + '</div>' +
@@ -914,7 +949,8 @@ function openStore(id) {
       (st.about ? '<p class="desc">' + esc(st.about) + '</p>' : '') +
       '<div class="row"><a class="btn btn-wa" href="https://wa.me/' + esc(st.phone) + '?text=' + waText + '" target="_blank" rel="noopener">' + esc(t('wa')) + '</a></div>' +
       '<div class="row"><a class="btn btn-ghost" href="tel:+' + esc(st.phone) + '">📞 ' + esc(t('call')) + '</a><button class="btn btn-ghost" id="shareStoreBtn">🔗 ' + esc(t('share')) + '</button></div>' +
-      '<div class="owner-box"><span>' + esc(t('ownerQ')) + '</span><button type="button" class="btn btn-olive" id="addToStoreBtn">＋ ' + esc(t('addToStore')) + '</button></div>' +
+      (isOwner(st) ? '<div class="owner-box"><span>' + esc(t('aWelcome')) + '</span><button type="button" class="btn btn-olive" id="addToStoreBtn">＋ ' + esc(t('addToStore')) + '</button></div>'
+        : '<div class="owner-box"><span>' + esc(t('ownerQ')) + '</span><button type="button" class="btn btn-ghost" id="addToStoreBtn">🔐 ' + esc(t('ownerLogin')) + '</button></div>') +
       '<h4 style="margin:18px 0 0">' + esc(t('storeProducts')) + ' (' + items.length + ')</h4>' +
       (items.length ? '<div class="store-grid">' + items.map(cardHtml).join('') + '</div>' : '<p class="meta" style="text-align:center;padding:24px 0">' + esc({ar:'سيضيف البائع منتوجاته قريباً.',fr:'Le vendeur ajoutera bientôt ses produits.',en:'The seller will add products soon.'}[S.lang] || '') + '</p>') +
     '</div>';
@@ -922,15 +958,7 @@ function openStore(id) {
   $('#detailSheet').scrollTop = 0;
   try { if (location.hash !== '#store-' + id) history.replaceState(null, '', '#store-' + id); } catch (e) {}
   $('#shareStoreBtn').onclick = () => shareLink('#store-' + id, st.name);
-  $('#addToStoreBtn').onclick = () => {
-    hideModal($('#detailModal'));
-    $('#f_seller').value = st.name || '';
-    if (st.stype) $('#f_stype').value = st.stype;
-    $('#f_city').value = st.city || '';
-    const p = String(st.phone || '');
-    $('#f_phone').value = p.indexOf('212') === 0 ? '0' + p.slice(3) : p;
-    showModal('#addModal');
-  };
+  $('#addToStoreBtn').onclick = () => { hideModal($('#detailModal')); if (isOwner(st)) addAsStore(); else openAccount(); };
 }
 
 /* ---------- الفيديو ---------- */
@@ -962,6 +990,7 @@ function openDetail(id) {
     (photos.length > 1 ? '<div class="dots" id="dots">' + photos.map((_, i) => '<span' + (i ? '' : ' class="on"') + '></span>').join('') + '</div>' : '') +
     '<div class="pad">' +
       (l.featured ? '<span class="ribbon" style="position:static;display:inline-block">' + esc(t('featured')) + '</span>' : '') +
+      (l.sold ? '<span class="chip sold">' + esc(t('soldOut')) + '</span>' : '') +
       '<h1 class="d-title">' + esc(l.title) + '</h1>' +
       '<div class="d-price">' + esc(priceStr(l)) + '</div>' +
       '<div class="meta" style="margin-top:4px">📍 ' + esc(l.city) + '</div>' +
@@ -1026,7 +1055,7 @@ function showModal(sel) { $(sel).classList.remove('hidden'); document.body.style
 function hideModal(m) {
   m.classList.add('hidden');
   if (!document.querySelector('.modal:not(.hidden)')) document.body.style.overflow = '';
-  if (m.id === 'detailModal' || m.id === 'addModal' || m.id === 'storeModal') { S.openId = null; S.openStore = null; try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
+  if (m.id === 'detailModal' || m.id === 'addModal' || m.id === 'storeModal' || m.id === 'accModal') { S.openId = null; S.openStore = null; try { if (location.hash) history.replaceState(null, '', location.pathname + location.search); } catch (e) {} }
 }
 document.addEventListener('click', e => {
   if (e.target.matches('[data-close]')) hideModal(e.target.closest('.modal'));
@@ -1086,7 +1115,7 @@ async function post(payload) {
   const res = await fetch(API_URL, { method: 'POST', body: JSON.stringify(payload) }); // text/plain: بلا preflight
   return res.json();
 }
-function errText(code) { return code === 'limit' ? t('errLimit') : code === 'exists' ? t('errExists') : code === 'logo' ? t('errLogo') : code === 'phone' ? t('errPhone') : code === 'rate' ? t('errRate') : code === 'consent' ? t('errConsent') : code === 'photos' ? t('errPhotos') : code === 'missing' ? t('errRequired') : t('errNet'); }
+function errText(code) { return code === 'storephone' ? t('errStorePhone') : code === 'badlogin' ? t('errBadLogin') : code === 'locked' ? t('errLocked') : code === 'auth' ? t('errAuth') : code === 'limit' ? t('errLimit') : code === 'exists' ? t('errExists') : code === 'logo' ? t('errLogo') : code === 'phone' ? t('errPhone') : code === 'rate' ? t('errRate') : code === 'consent' ? t('errConsent') : code === 'photos' ? t('errPhotos') : code === 'missing' ? t('errRequired') : t('errNet'); }
 
 $('#addForm').onsubmit = async e => {
   e.preventDefault();
@@ -1099,7 +1128,7 @@ $('#addForm').onsubmit = async e => {
   if (!f.consent.checked) return showMsg(msg, 'err', t('errConsent'));
   btn.disabled = true; btn.textContent = t('sending'); msg.classList.add('hidden');
   try {
-    const r = await post({ action: 'listing', ...data, consent: true, photos: S.photos.map(p => p.data) });
+    const r = await post({ action: 'listing', ...data, token: S.auth ? S.auth.token : '', consent: true, photos: S.photos.map(p => p.data) });
     if (!r.ok) throw new Error(r.error);
     $('#addBody').innerHTML = '<div class="done"><div class="big">🎉</div><h2>' + esc(t('doneTitle')) + '</h2><p>' + esc(t('doneText')) + '</p>' + (r.demo ? '<p class="meta">' + esc(t('doneDemo')) + '</p>' : '') +
       '<div class="row"><button class="btn btn-honey" id="againBtn">＋ ' + esc(t('another')) + '</button><button class="btn btn-ghost" data-close>' + esc(t('back')) + '</button></div></div>';
@@ -1141,8 +1170,119 @@ pickOne('#logoBtn', '#logoInput', '#logoPrev', 'logo', 600);
 pickOne('#coverBtn', '#coverInput', '#coverPrev', 'cover', 1600);
 
 $('#heroAddBtn').onclick = () => showModal('#addModal');
+
+/* ---------- حساب البائع ---------- */
+S.auth = (() => { try { return JSON.parse(store.get('kb_auth') || 'null'); } catch (e) { return null; } })();
+function setAuth(a) { S.auth = a; store.set('kb_auth', a ? JSON.stringify(a) : ''); $('#accBtn').classList.toggle('on', !!a); }
+setAuth(S.auth);
+const localPhone = p => { p = String(p || ''); return p.indexOf('212') === 0 ? '0' + p.slice(3) : p; };
+function isOwner(st) { return !!(S.auth && S.auth.store && st && S.auth.store.id === st.id); }
+$('#accBtn').onclick = () => openAccount();
+
+function openAccount() {
+  document.querySelectorAll('.modal:not(.hidden)').forEach(m => { if (m.id !== 'accModal') m.classList.add('hidden'); });
+  showModal('#accModal');
+  try { history.replaceState(null, '', '#account'); } catch (e) {}
+  if (S.auth) renderDash(); else renderLogin();
+}
+
+function renderLogin(note) {
+  $('#accBody').innerHTML =
+    '<form class="form" id="loginForm" novalidate>' +
+      '<h3 style="margin:0">🔐 ' + esc(t('aLoginTitle')) + '</h3>' +
+      '<div class="field"><label for="lg_phone">' + esc(t('aPhone')) + '</label><input id="lg_phone" name="phone" type="tel" inputmode="tel" placeholder="06XXXXXXXX" dir="ltr" autocomplete="tel"></div>' +
+      '<div class="field"><label for="lg_pin">' + esc(t('aPin')) + '</label><input id="lg_pin" name="pin" type="password" inputmode="numeric" maxlength="6" autocomplete="one-time-code" dir="ltr" placeholder="••••••" style="letter-spacing:6px;text-align:center;font-size:20px"></div>' +
+      '<div id="lgMsg" class="msg' + (note ? ' err' : ' hidden') + '" role="alert">' + esc(note || '') + '</div>' +
+      '<button class="btn btn-orange btn-big" id="lgBtn" type="submit">' + esc(t('aLoginBtn')) + '</button>' +
+      '<p class="meta" style="margin:0">' + esc(t('aHint')) + '</p>' +
+      '<p class="meta" style="margin:0">' + esc(t('aNoStore')) + ' <button type="button" class="linkbtn" data-openstore>' + esc(t('openStore')) + '</button></p>' +
+    '</form>';
+  $('#loginForm').onsubmit = async e => {
+    e.preventDefault();
+    const phone = $('#lg_phone').value, pin = $('#lg_pin').value.replace(/\D/g, ''), msg = $('#lgMsg'), btn = $('#lgBtn');
+    if (!validPhone(phone)) return showMsg(msg, 'err', t('errPhone'));
+    if (pin.length !== 6) return showMsg(msg, 'err', t('errPin'));
+    btn.disabled = true; btn.textContent = t('aLoading');
+    try {
+      const r = S.demo ? { ok: true, token: 'demo', store: S.stores[0] || { id: 'demo', name: 'Demo', city: '', phone: '212600000000' } } : await post({ action: 'login', phone, pin });
+      if (!r.ok) throw new Error(r.error);
+      setAuth({ token: r.token, store: r.store });
+      renderDash();
+    } catch (err) { showMsg(msg, 'err', errText(err && err.message)); btn.disabled = false; btn.textContent = t('aLoginBtn'); }
+  };
+}
+
+const STATUS = { live: 'stLive', pending: 'stPending', sold: 'stSold' };
+async function renderDash() {
+  const a = S.auth;
+  $('#accBody').innerHTML = '<p class="meta">' + esc(t('aLoading')) + '</p>';
+  let r;
+  try { r = S.demo ? { ok: true, store: a.store, items: [] } : await post({ action: 'me', token: a.token }); }
+  catch (e) { r = { ok: false, error: 'net' }; }
+  if (!r.ok) {
+    if (r.error === 'auth') { setAuth(null); return renderLogin(t('errAuth')); }
+    $('#accBody').innerHTML = '<div class="msg err">' + esc(errText(r.error)) + '</div>'; return;
+  }
+  const st = r.store; setAuth({ token: a.token, store: st });
+  const items = r.items || [];
+  $('#accBody').innerHTML =
+    '<div class="dash-head">' + logoHtml(st) + '<div><b>' + esc(st.name) + '</b><span class="meta">📍 ' + esc(st.city) + ' · ' + esc(localPhone(st.phone)) + '</span></div></div>' +
+    '<div class="dash-actions"><button class="btn btn-orange btn-big" id="dAdd">＋ ' + esc(t('aAdd')) + '</button>' +
+      '<button class="btn btn-ghost" id="dView">🏪 ' + esc(t('aView')) + '</button><button class="btn btn-ghost" id="dOut">↩ ' + esc(t('aOut')) + '</button></div>' +
+    '<h4 style="margin:6px 0 0">' + esc(t('aMine')) + ' (' + items.length + ')</h4>' +
+    (items.length ? items.map(it => '<div class="my-item" data-mid="' + esc(it.id) + '">' +
+        (it.photo ? '<img src="' + esc(photoUrl(it.photo)) + '" alt="">' : '<div class="ph0">' + catOf(it.cat).ico + '</div>') +
+        '<div class="info"><b>' + esc(it.title) + '</b><span class="meta">' + esc(priceStr(it)) + '</span><br><span class="chip ' + it.status + '">' + esc(t(STATUS[it.status])) + '</span></div>' +
+        '<div class="acts">' + (it.status === 'live' ? '<button data-op="sold">' + esc(t('aSold')) + '</button>' : it.status === 'sold' ? '<button data-op="unsold">' + esc(t('aAvail')) + '</button>' : '') +
+        '<button class="danger" data-op="delete">' + esc(t('aDel')) + '</button></div></div>').join('')
+      : '<p class="meta">' + esc(t('aEmpty')) + '</p>') +
+    '<details class="edit-store"><summary>✏️ ' + esc(t('aEdit')) + '</summary><form class="form" id="editForm" novalidate>' +
+      '<div class="field"><label for="e_city">' + esc(t('aCity')) + '</label><input id="e_city" name="city" list="cityList" value="' + esc(st.city) + '"></div>' +
+      '<div class="field"><label for="e_about">' + esc(t('aAbout')) + '</label><textarea id="e_about" name="about" rows="4">' + esc(st.about || '') + '</textarea></div>' +
+      '<div class="one-photo"><div class="prev round" id="eLogoPrev">' + (st.logo ? '<img src="' + esc(photoUrl(st.logo)) + '" alt="">' : '🏪') + '</div><button type="button" class="photo-btn" id="eLogoBtn">' + esc(t('aLogo')) + '</button></div>' +
+      '<div class="one-photo"><div class="prev" id="eCoverPrev">' + (st.cover ? '<img src="' + esc(photoUrl(st.cover)) + '" alt="">' : '🖼️') + '</div><button type="button" class="photo-btn" id="eCoverBtn">' + esc(t('aCover')) + '</button></div>' +
+      '<div id="eMsg" class="msg hidden" role="alert"></div>' +
+      '<button class="btn btn-olive" id="eBtn" type="submit">' + esc(t('aSave')) + '</button></form></details>';
+  $('#dAdd').onclick = () => { hideModal($('#accModal')); addAsStore(); };
+  $('#dView').onclick = () => { hideModal($('#accModal')); openStore(st.id); };
+  $('#dOut').onclick = () => { setAuth(null); renderLogin(); };
+  $('#accBody').querySelectorAll('.my-item [data-op]').forEach(b => b.onclick = async () => {
+    const op = b.dataset.op, id = b.closest('.my-item').dataset.mid;
+    if (op === 'delete' && !b.classList.contains('sure')) { b.classList.add('sure'); b.textContent = t('aDelSure'); return; }
+    b.disabled = true;
+    try { const x = S.demo ? { ok: true } : await post({ action: 'mylisting', token: S.auth.token, id, op }); if (!x.ok) throw new Error(x.error); renderDash(); }
+    catch (err) { toast(errText(err && err.message)); b.disabled = false; }
+  });
+  S.eLogo = S.eCover = null;
+  pickOne('#eLogoBtn', '#eLogoInput', '#eLogoPrev', 'eLogo', 600);
+  pickOne('#eCoverBtn', '#eCoverInput', '#eCoverPrev', 'eCover', 1600);
+  $('#editForm').onsubmit = async e => {
+    e.preventDefault();
+    const msg = $('#eMsg'), btn = $('#eBtn');
+    btn.disabled = true; btn.textContent = t('sending');
+    try {
+      const x = S.demo ? { ok: true, store: st } : await post({ action: 'storeedit', token: S.auth.token, city: $('#e_city').value, about: $('#e_about').value, logo: S.eLogo || '', cover: S.eCover || '' });
+      if (!x.ok) throw new Error(x.error);
+      setAuth({ token: S.auth.token, store: x.store });
+      showMsg(msg, 'ok', t('aSaved'));
+    } catch (err) { showMsg(msg, 'err', errText(err && err.message)); }
+    btn.disabled = false; btn.textContent = t('aSave');
+  };
+}
+
+/* يفتح استمارة الإعلان بمعلومات المتجر جاهزة */
+function addAsStore() {
+  const st = S.auth.store;
+  $('#f_seller').value = st.name || '';
+  if (st.stype) $('#f_stype').value = st.stype;
+  $('#f_city').value = st.city || '';
+  $('#f_phone').value = localPhone(st.phone);
+  $('#f_phone').readOnly = true;
+  showModal('#addModal');
+}
 document.querySelector('footer').addEventListener('click', e => {
   if (e.target.closest('[data-footadd]')) showModal('#addModal');
+  if (e.target.closest('[data-footacc]')) openAccount();
   const c = e.target.closest('[data-footcat]');
   if (c) { S.cat = c.dataset.footcat; renderCats(); renderGrid(); $('#cats').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
 });
@@ -1184,6 +1324,7 @@ $('#grid').onclick = e => { const c = e.target.closest('.card'); if (c) openDeta
 function route() {
   const h = decodeURIComponent(location.hash.slice(1));
   if (h === 'add') showModal('#addModal');
+  else if (h === 'account') openAccount();
   else if (h === 'open-store') showModal('#storeModal');
   else if (h.startsWith('store-')) openStore(h.slice(6));
   else if (h && S.listings.some(l => l.id === h)) openDetail(h);
