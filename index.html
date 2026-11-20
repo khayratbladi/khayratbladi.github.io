@@ -83,6 +83,7 @@
   .btn-orange { background: #e8731a; color: #fff; }
   .btn-orange:hover { background: #d5650f; }
   .btn-big { font-size: 17px; padding: 13px 22px; box-shadow: 0 4px 14px rgba(232,115,26,.35); }
+  .city-other { margin-top: 8px; }
   .acc-btn { width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(255,255,255,.4); background: none; color: #fff; display: grid; place-items: center; flex: none; position: relative; cursor: pointer; padding: 0; }
   .acc-btn.on::after { content: ""; position: absolute; top: 1px; inset-inline-end: 1px; width: 9px; height: 9px; border-radius: 50%; background: #3ddc6a; border: 2px solid var(--olive-dark); }
   .dash-head { display: flex; gap: 12px; align-items: center; }
@@ -496,7 +497,8 @@
           </div>
           <div class="field">
             <label for="f_city" data-t="city">المدينة / الجهة</label>
-            <input id="f_city" name="city" maxlength="60" required list="cityList">
+            <select id="f_city" name="city" class="city-sel" required></select>
+            <input id="f_city_o" class="city-other hidden" maxlength="60" data-t-ph="otherCityPh" placeholder="اكتب اسم مدينتك أو جماعتك">
           </div>
         </div>
         <div class="field">
@@ -548,7 +550,8 @@
           </div>
           <div class="field">
             <label for="s_city" data-t="city">المدينة / الجهة</label>
-            <input id="s_city" name="city" maxlength="60" required list="cityList">
+            <select id="s_city" name="city" class="city-sel" required></select>
+            <input id="s_city_o" class="city-other hidden" maxlength="60" placeholder="اكتب اسم مدينتك أو جماعتك">
           </div>
         </div>
         <div class="field">
@@ -585,7 +588,7 @@
   </div>
 </div>
 
-<datalist id="cityList"></datalist>
+
 
 <script>
 /* =====================================================================
@@ -623,7 +626,53 @@ const UNITS = [
   { id: 'box',     ar: 'علبة',  fr: 'boîte',   en: 'box' },
   { id: 'service', ar: 'خدمة',  fr: 'service', en: 'service' }
 ];
-const CITIES = ['الدار البيضاء','الرباط','فاس','مكناس','مراكش','أكادير','طنجة','تطوان','وجدة','بني ملال','خنيفرة','أزيلال','الراشيدية','أرفود','زاكورة','ورزازات','تالوين','تارودانت','الصويرة','تزنيت','كلميم','العيون','الحسيمة','شفشاون','وزان','تاونات','سطات','الجديدة','آسفي','قلعة السراغنة','إفران','ميدلت','فكيك'];
+const REGIONS = [
+  ['طنجة - تطوان - الحسيمة', ['طنجة','تطوان','الحسيمة','شفشاون','العرائش','القصر الكبير','أصيلة','المضيق','الفنيدق','وزان']],
+  ['الشرق', ['وجدة','الناظور','بركان','تاوريرت','جرادة','فكيك','بوعرفة','الدريوش','زايو']],
+  ['فاس - مكناس', ['فاس','مكناس','إفران','أزرو','إيموزار','صفرو','تازة','تاونات','الحاجب','بولمان','ميسور']],
+  ['الرباط - سلا - القنيطرة', ['الرباط','سلا','تمارة','القنيطرة','الخميسات','تيفلت','سيدي قاسم','سيدي سليمان','سيدي يحيى الغرب']],
+  ['بني ملال - خنيفرة', ['بني ملال','خنيفرة','أزيلال','الفقيه بن صالح','خريبكة','قصبة تادلة','دمنات']],
+  ['الدار البيضاء - سطات', ['الدار البيضاء','المحمدية','الجديدة','آزمور','سطات','برشيد','بنسليمان','سيدي بنور']],
+  ['مراكش - آسفي', ['مراكش','آسفي','الصويرة','قلعة السراغنة','شيشاوة','الحوز','تحناوت','أمزميز','اليوسفية']],
+  ['درعة - تافيلالت', ['الراشيدية','أرفود','الريصاني','الريش','ميدلت','ورزازات','تنغير','قلعة مكونة','زاكورة','أكدز','تازارين']],
+  ['سوس - ماسة', ['أكادير','إنزكان','أيت ملول','تارودانت','أولاد تايمة','تالوين','إغرم','تزنيت','اشتوكة آيت باها','طاطا']],
+  ['كلميم - واد نون', ['كلميم','طانطان','سيدي إفني','أسا']],
+  ['العيون - الساقية الحمراء', ['العيون','بوجدور','السمارة','طرفاية']],
+  ['الداخلة - وادي الذهب', ['الداخلة','أوسرد']]
+];
+const CITIES = REGIONS.flatMap(r => r[1]);
+const OTHER = '__other';
+function cityOptions(extra) {
+  const known = new Set(CITIES);
+  const more = [...new Set((extra || []).filter(c => c && !known.has(c)))];
+  return '<option value="">' + esc(t('chooseCity')) + '</option>' +
+    REGIONS.map(r => '<optgroup label="' + esc(r[0]) + '">' + r[1].map(c => '<option>' + esc(c) + '</option>').join('') + '</optgroup>').join('') +
+    (more.length ? '<optgroup label="…">' + more.map(c => '<option>' + esc(c) + '</option>').join('') + '</optgroup>' : '') +
+    '<option value="' + OTHER + '">' + esc(t('otherCity')) + '</option>';
+}
+/* قائمة مدن منسدلة مع خيار «مدينة أخرى» */
+function fillCity(sel, keep) {
+  const el = $(sel), other = $(sel + '_o');
+  const v = keep != null ? keep : cityVal(sel);
+  el.innerHTML = cityOptions([v]);
+  if (other) other.placeholder = t('otherCityPh');
+  setCity(sel, v);
+  if (!el.dataset.bound) {
+    el.dataset.bound = 1;
+    el.addEventListener('change', () => { if (other) { other.classList.toggle('hidden', el.value !== OTHER); if (el.value === OTHER) other.focus(); } });
+  }
+}
+function setCity(sel, v) {
+  const el = $(sel), other = $(sel + '_o');
+  v = String(v || '').trim();
+  if (v && ![...el.options].some(o => o.value === v)) { const o = document.createElement('option'); o.textContent = v; el.insertBefore(o, el.lastElementChild); }
+  el.value = v; if (other) { other.classList.add('hidden'); other.value = ''; }
+}
+function cityVal(sel) {
+  const el = $(sel); if (!el) return '';
+  if (el.value === OTHER) { const o = $(sel + '_o'); return o ? o.value.trim() : ''; }
+  return el.value || '';
+}
 
 const T = {
   ar: {
@@ -645,6 +694,7 @@ const T = {
     heroSub: 'زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.',
     postFree: 'أضف إعلانك مجاناً', ownerQ: 'هل أنت صاحب هذا المتجر؟', addToStore: 'أضف منتوجاً إلى متجري', footSellers: 'للبائعين', footCats: 'الأصناف', footWhy: 'لماذا خيرات بلادي؟', rights: 'جميع الحقوق محفوظة', madeIn: 'صُنع بالمغرب، لخدمة المنتوج المحلي',
     aTitle: 'حسابي', aLoginLink: 'دخول أصحاب المتاجر', aLoginTitle: 'دخول صاحب المتجر', aPhone: 'رقم الهاتف (واتساب المتجر)', aPin: 'رمز الدخول (6 أرقام)', aLoginBtn: 'دخول', aHint: 'يصلك رمز الدخول عبر واتساب من إدارة المنصة بعد الموافقة على متجرك. نسيت الرمز؟ راسل الإدارة لإرسال رمز جديد.', aNoStore: 'ليس لديك متجر بعد؟', aWelcome: 'مرحباً بك في متجرك', aAdd: 'أضف منتوجاً إلى متجري', aView: 'عرض متجري', aOut: 'خروج', aMine: 'منتوجاتي', aEmpty: 'لم تُضف أي منتوج بعد. ابدأ بإضافة منتوجك الأول.', aLoading: 'جارٍ التحميل…', stLive: 'منشور', stPending: 'في المراجعة', stSold: 'نفد', aSold: 'نفد', aAvail: 'متوفر', aDel: 'حذف', aDelSure: 'تأكيد الحذف؟', aEdit: 'تعديل معلومات المتجر', aCity: 'المدينة', aAbout: 'نبذة عن المتجر', aLogo: 'تغيير الشعار', aCover: 'تغيير الغلاف', aSave: 'حفظ التعديلات', aSaved: 'تم الحفظ ✓ تظهر التعديلات في الموقع خلال دقيقة.', ownerLogin: 'دخول صاحب المتجر', soldOut: 'نفد', errStorePhone: 'هذا الرقم مرتبط بمتجر. ادخل إلى حسابك أولاً (أيقونة 👤 أعلى الصفحة) ثم أضف منتوجك من هناك.', errBadLogin: 'رقم الهاتف أو رمز الدخول غير صحيح.', errLocked: 'محاولات كثيرة خاطئة. أعد المحاولة بعد ساعة.', errAuth: 'انتهت الجلسة. ادخل من جديد.', errPin: 'رمز الدخول يتكوّن من 6 أرقام.',
+    chooseCity: 'اختر المدينة', otherCity: '➕ مدينة أخرى…', otherCityPh: 'اكتب اسم مدينتك أو جماعتك',
     heroBand: 'دعم للمنتوج المحلي… تنمية لمجتمعنا', discover: 'اكتشف المنتوجات', badge1: 'منتوجات مغربية أصيلة', badge2: 'دعم التعاونيات', badge3: 'تواصل مباشر مع البائع',
     searchPh: 'ابحث: عسل الزعتر، زيت بلدي، أملو…', allCities: 'كل المدن', all: 'الكل',
     demo: 'وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.',
@@ -696,6 +746,7 @@ const T = {
     heroSub: "Huile d'olive, miel, argan, dattes, fruits secs… des coopératives et producteurs de toutes les régions du Maroc.",
     postFree: 'Publier une annonce gratuite', ownerQ: 'Vous êtes le propriétaire de cette boutique ?', addToStore: 'Ajouter un produit à ma boutique', footSellers: 'Vendeurs', footCats: 'Catégories', footWhy: 'Pourquoi Khayrat Bladi ?', rights: 'Tous droits réservés', madeIn: 'Fait au Maroc, au service du produit local',
     aTitle: 'Mon compte', aLoginLink: 'Espace boutiques', aLoginTitle: 'Connexion vendeur', aPhone: 'Téléphone (WhatsApp de la boutique)', aPin: 'Code d’accès (6 chiffres)', aLoginBtn: 'Se connecter', aHint: 'Vous recevez votre code par WhatsApp après validation de votre boutique. Code oublié ? Contactez l’administration.', aNoStore: 'Pas encore de boutique ?', aWelcome: 'Bienvenue dans votre boutique', aAdd: 'Ajouter un produit à ma boutique', aView: 'Voir ma boutique', aOut: 'Déconnexion', aMine: 'Mes produits', aEmpty: 'Aucun produit pour le moment. Ajoutez votre premier produit.', aLoading: 'Chargement…', stLive: 'Publié', stPending: 'En validation', stSold: 'Épuisé', aSold: 'Épuisé', aAvail: 'Disponible', aDel: 'Supprimer', aDelSure: 'Confirmer ?', aEdit: 'Modifier la boutique', aCity: 'Ville', aAbout: 'Présentation', aLogo: 'Changer le logo', aCover: 'Changer la couverture', aSave: 'Enregistrer', aSaved: 'Enregistré ✓ Visible sur le site d’ici une minute.', ownerLogin: 'Connexion du propriétaire', soldOut: 'Épuisé', errStorePhone: 'Ce numéro appartient à une boutique. Connectez-vous d’abord (icône 👤 en haut) puis ajoutez votre produit.', errBadLogin: 'Téléphone ou code incorrect.', errLocked: 'Trop d’essais. Réessayez dans une heure.', errAuth: 'Session expirée. Reconnectez-vous.', errPin: 'Le code contient 6 chiffres.',
+    chooseCity: 'Choisir la ville', otherCity: '➕ Autre ville…', otherCityPh: 'Écrivez votre ville ou commune',
     heroBand: 'Soutenir le produit local… développer notre communauté', discover: 'Découvrir les produits', badge1: 'Produits marocains authentiques', badge2: 'Soutien aux coopératives', badge3: 'Contact direct avec le vendeur',
     searchPh: 'Rechercher : miel de thym, huile beldi, amlou…', allCities: 'Toutes les villes', all: 'Tout',
     demo: 'Mode démo : les annonces affichées sont des exemples. Connectez la plateforme à Google Sheets pour afficher les vraies annonces.',
@@ -747,6 +798,7 @@ const T = {
     heroSub: 'Olive oil, wild honey, argan, dates, dried fruits… from cooperatives and producers across every region of Morocco.',
     postFree: 'Post a free ad', ownerQ: 'Do you own this store?', addToStore: 'Add a product to my store', footSellers: 'For sellers', footCats: 'Categories', footWhy: 'Why Khayrat Bladi?', rights: 'All rights reserved', madeIn: 'Made in Morocco, for local products',
     aTitle: 'My account', aLoginLink: 'Store owners login', aLoginTitle: 'Store owner login', aPhone: 'Phone (store WhatsApp)', aPin: 'Access code (6 digits)', aLoginBtn: 'Log in', aHint: 'You receive your code on WhatsApp once your store is approved. Forgot it? Contact the admin.', aNoStore: 'No store yet?', aWelcome: 'Welcome to your store', aAdd: 'Add a product to my store', aView: 'View my store', aOut: 'Log out', aMine: 'My products', aEmpty: 'No products yet. Add your first one.', aLoading: 'Loading…', stLive: 'Live', stPending: 'Under review', stSold: 'Sold out', aSold: 'Sold out', aAvail: 'Available', aDel: 'Delete', aDelSure: 'Confirm?', aEdit: 'Edit store info', aCity: 'City', aAbout: 'About the store', aLogo: 'Change logo', aCover: 'Change cover', aSave: 'Save changes', aSaved: 'Saved ✓ Visible on the site within a minute.', ownerLogin: 'Store owner login', soldOut: 'Sold out', errStorePhone: 'This number belongs to a store. Log in first (👤 icon at the top), then add your product from there.', errBadLogin: 'Wrong phone number or code.', errLocked: 'Too many attempts. Try again in an hour.', errAuth: 'Session expired. Please log in again.', errPin: 'The code has 6 digits.',
+    chooseCity: 'Choose a city', otherCity: '➕ Other city…', otherCityPh: 'Type your city or town',
     heroBand: 'Supporting local products… growing our community', discover: 'Discover products', badge1: 'Authentic Moroccan products', badge2: 'Supporting cooperatives', badge3: 'Direct contact with the seller',
     searchPh: 'Search: thyme honey, beldi olive oil, amlou…', allCities: 'All cities', all: 'All',
     demo: 'Demo mode: the ads shown are examples. Connect the platform to Google Sheets to show real ads.',
@@ -848,10 +900,10 @@ function fillSelects() {
   const keepS = $('#s_stype').value;
   $('#s_stype').innerHTML = $('#f_stype').innerHTML; if (keepS) $('#s_stype').value = keepS;
   $('#f_cat').value = keepCat; if (keepUnit) $('#f_unit').value = keepUnit; if (keepType) $('#f_stype').value = keepType;
-  const cities = [...new Set(S.listings.map(l => l.city).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ar'));
+  const cities = [...new Set(S.listings.map(l => l.city).concat(S.stores.map(x => x.city)).filter(Boolean))].sort((a, b) => a.localeCompare(b, 'ar'));
   $('#cityFilter').innerHTML = '<option value="">' + esc(t('allCities')) + '</option>' + cities.map(c => '<option>' + esc(c) + '</option>').join('');
   $('#cityFilter').value = S.city;
-  $('#cityList').innerHTML = [...new Set(CITIES.concat(cities))].map(c => '<option value="' + esc(c) + '">').join('');
+  fillCity('#f_city'); fillCity('#s_city');
 }
 
 /* ---------- التقييمات ---------- */
@@ -1123,6 +1175,7 @@ $('#addForm').onsubmit = async e => {
   const data = Object.fromEntries(new FormData(f).entries());
   if (!S.photos.filter(p => p.data).length) return showMsg(msg, 'err', t('errPhotos'));
   if (S.photos.some(p => p.loading)) return;
+  data.city = cityVal('#f_city');
   if (!data.title.trim() || !data.cat || !data.seller.trim() || !data.city.trim()) return showMsg(msg, 'err', t('errRequired'));
   if (!validPhone(data.phone)) return showMsg(msg, 'err', t('errPhone'));
   if (!f.consent.checked) return showMsg(msg, 'err', t('errConsent'));
@@ -1237,7 +1290,7 @@ async function renderDash() {
         '<button class="danger" data-op="delete">' + esc(t('aDel')) + '</button></div></div>').join('')
       : '<p class="meta">' + esc(t('aEmpty')) + '</p>') +
     '<details class="edit-store"><summary>✏️ ' + esc(t('aEdit')) + '</summary><form class="form" id="editForm" novalidate>' +
-      '<div class="field"><label for="e_city">' + esc(t('aCity')) + '</label><input id="e_city" name="city" list="cityList" value="' + esc(st.city) + '"></div>' +
+      '<div class="field"><label for="e_city">' + esc(t('aCity')) + '</label><select id="e_city" class="city-sel"></select><input id="e_city_o" class="city-other hidden" maxlength="60"></div>' +
       '<div class="field"><label for="e_about">' + esc(t('aAbout')) + '</label><textarea id="e_about" name="about" rows="4">' + esc(st.about || '') + '</textarea></div>' +
       '<div class="one-photo"><div class="prev round" id="eLogoPrev">' + (st.logo ? '<img src="' + esc(photoUrl(st.logo)) + '" alt="">' : '🏪') + '</div><button type="button" class="photo-btn" id="eLogoBtn">' + esc(t('aLogo')) + '</button></div>' +
       '<div class="one-photo"><div class="prev" id="eCoverPrev">' + (st.cover ? '<img src="' + esc(photoUrl(st.cover)) + '" alt="">' : '🖼️') + '</div><button type="button" class="photo-btn" id="eCoverBtn">' + esc(t('aCover')) + '</button></div>' +
@@ -1254,6 +1307,7 @@ async function renderDash() {
     catch (err) { toast(errText(err && err.message)); b.disabled = false; }
   });
   S.eLogo = S.eCover = null;
+  fillCity('#e_city', st.city || '');
   pickOne('#eLogoBtn', '#eLogoInput', '#eLogoPrev', 'eLogo', 600);
   pickOne('#eCoverBtn', '#eCoverInput', '#eCoverPrev', 'eCover', 1600);
   $('#editForm').onsubmit = async e => {
@@ -1261,7 +1315,7 @@ async function renderDash() {
     const msg = $('#eMsg'), btn = $('#eBtn');
     btn.disabled = true; btn.textContent = t('sending');
     try {
-      const x = S.demo ? { ok: true, store: st } : await post({ action: 'storeedit', token: S.auth.token, city: $('#e_city').value, about: $('#e_about').value, logo: S.eLogo || '', cover: S.eCover || '' });
+      const x = S.demo ? { ok: true, store: st } : await post({ action: 'storeedit', token: S.auth.token, city: cityVal('#e_city'), about: $('#e_about').value, logo: S.eLogo || '', cover: S.eCover || '' });
       if (!x.ok) throw new Error(x.error);
       setAuth({ token: S.auth.token, store: x.store });
       showMsg(msg, 'ok', t('aSaved'));
@@ -1275,7 +1329,7 @@ function addAsStore() {
   const st = S.auth.store;
   $('#f_seller').value = st.name || '';
   if (st.stype) $('#f_stype').value = st.stype;
-  $('#f_city').value = st.city || '';
+  setCity('#f_city', st.city || '');
   $('#f_phone').value = localPhone(st.phone);
   $('#f_phone').readOnly = true;
   showModal('#addModal');
@@ -1295,6 +1349,7 @@ $('#storeForm').onsubmit = async e => {
   const data = Object.fromEntries(new FormData(f).entries());
   const design = data.design || '';
   if (!S.logo && !design) return showMsg(msg, 'err', t('errLogo'));
+  data.city = cityVal('#s_city');
   if (!data.name.trim() || !data.city.trim()) return showMsg(msg, 'err', t('errRequired'));
   if (!validPhone(data.phone)) return showMsg(msg, 'err', t('errPhone'));
   if (!f.consent.checked) return showMsg(msg, 'err', t('errConsent'));
