@@ -247,6 +247,9 @@
   .design-opt b { display: block; color: var(--olive-dark); }
   .design-opt .price { font-weight: 800; color: #8a5a00; white-space: nowrap; margin-inline-start: auto; }
   .design-opt small { color: #6b6b5f; }
+  .form .design-req { margin-top: 8px; display: flex; flex-direction: row; align-items: center; gap: 10px; }
+  .design-req input { width: 20px; height: 20px; flex: 0 0 auto; margin: 0; }
+  .design-req span { display: flex; gap: 6px; align-items: baseline; flex-wrap: wrap; }
   .design-banner { display: flex; align-items: center; gap: 12px; width: 100%; text-align: start; margin: 14px 0 4px; padding: 12px 16px; border: 0; border-radius: 14px; background: var(--honey-light); color: var(--olive-dark); font: inherit; font-weight: 700; cursor: pointer; }
   .design-banner .go { margin-inline-start: auto; background: var(--olive-dark); color: #fff; border-radius: 999px; padding: 6px 14px; font-size: 14px; white-space: nowrap; }
   .one-photo { display: flex; gap: 10px; align-items: center; }
@@ -429,9 +432,9 @@
           <input type="file" id="coverInput" accept="image/*" hidden>
         </div>
         <div class="field design-box">
-          <label data-t="designQ">ليس لديك شعار أو صور احترافية؟</label>
-          <div class="hint" data-t="designHint">اختر باقة تصميم وسنتواصل معك عبر واتساب. يمكنك ترك الشعار فارغاً.</div>
-          <div class="design-opts" id="designOpts"></div>
+          <label data-t="designQ">ليس لديك شعار أو صور احترافية؟ نصمّمها لك</label>
+          <div class="hint" data-t="designHint">سنتواصل معك عبر واتساب. يمكنك ترك الشعار فارغاً.</div>
+          <label class="design-opt design-req"><input type="checkbox" name="design" value="request"><span><b data-t="designReq">اطلبها الآن</b><small data-t="designFee">(رسوم إضافية)</small></span></label>
         </div>
         <div class="field">
           <label for="s_name" data-t="storeName">اسم المتجر</label>
@@ -523,9 +526,9 @@ const T = {
     storeSubmit: 'طلب فتح المتجر', storeDoneTitle: 'تم استلام طلب متجرك!', storeDoneText: 'سنتواصل معك عبر واتساب لتأكيد الاشتراك وتفعيل متجرك.',
     limitNote: 'الحساب المجاني: حتى 5 إعلانات لكل رقم هاتف. لديك منتوجات كثيرة؟',
     errLimit: 'وصلت إلى الحد المجاني (5 إعلانات). افتح متجراً لنشر عدد غير محدود من المنتوجات.',
-    errExists: 'لديك متجر مفعّل بهذا الرقم. أضف منتوجاتك مباشرة عبر «أضف إعلانك».', errLogo: 'أضف شعاراً أو اختر باقة تصميم.',
+    errExists: 'لديك متجر مفعّل بهذا الرقم. أضف منتوجاتك مباشرة عبر «أضف إعلانك».', errLogo: 'أضف شعاراً أو اطلب خدمة التصميم.',
     designBanner: 'متجرك بمظهر احترافي: نصمّم لك الشعار والغلاف والوصف ابتداءً من 150 درهم', designGo: 'اطلب الخدمة',
-    designQ: 'ليس لديك شعار أو صور احترافية؟', designHint: 'اختر باقة تصميم وسنتواصل معك عبر واتساب. يمكنك ترك الشعار فارغاً.',
+    designQ: 'ليس لديك شعار أو صور احترافية؟ نصمّمها لك', designHint: 'سنتواصل معك عبر واتساب. يمكنك ترك الشعار فارغاً.', designReq: 'اطلبها الآن', designFee: '(رسوم إضافية)',
     designPlans: [['', 'لا، لدي شعاري وصوري', '', ''], ['start', 'باقة الانطلاق', 'شعار + صورة غلاف + نبذة بالعربية والفرنسية', '150 درهم'], ['identity', 'باقة الهوية', 'الانطلاق + تحسين صور 10 منتوجات + وصف احترافي لكل منتوج', '350 درهم'], ['ready', 'المتجر الجاهز', 'الهوية + نُدخل منتوجاتك في المتجر + ملصق للواتساب', '600 درهم']],
     designDone: 'سنتواصل معك عبر واتساب لبدء التصميم.',
     brand: 'خيرات بلادي', post: 'أضف إعلانك', heroTitle: 'خيرات بلادنا، من المنتج إليك مباشرة',
@@ -571,9 +574,9 @@ const T = {
     storeSubmit: 'Demander ma boutique', storeDoneTitle: 'Demande reçue !', storeDoneText: 'Nous vous contacterons sur WhatsApp pour confirmer et activer votre boutique.',
     limitNote: "Compte gratuit : jusqu'à 5 annonces par numéro. Beaucoup de produits ?",
     errLimit: 'Limite gratuite atteinte (5 annonces). Ouvrez une boutique pour publier sans limite.',
-    errExists: 'Une boutique est déjà active avec ce numéro. Ajoutez vos produits via « Déposer une annonce ».', errLogo: 'Ajoutez un logo ou choisissez une offre design.',
+    errExists: 'Une boutique est déjà active avec ce numéro. Ajoutez vos produits via « Déposer une annonce ».', errLogo: 'Ajoutez un logo ou commandez le design.',
     designBanner: 'Une boutique professionnelle : nous créons votre logo, couverture et description dès 150 DH', designGo: 'Commander',
-    designQ: 'Pas de logo ni de photos pro ?', designHint: 'Choisissez une offre design, nous vous contacterons sur WhatsApp. Le logo peut rester vide.',
+    designQ: 'Pas de logo ni de photos pro ? Nous les créons pour vous', designHint: 'Nous vous contacterons sur WhatsApp. Le logo peut rester vide.', designReq: 'Commandez maintenant', designFee: '(frais supplémentaires)',
     designPlans: [['', 'Non, j’ai mon logo et mes photos', '', ''], ['start', 'Offre Démarrage', 'Logo + couverture + présentation en arabe et en français', '150 DH'], ['identity', 'Offre Identité', 'Démarrage + retouche de 10 photos produits + descriptions pro', '350 DH'], ['ready', 'Boutique clé en main', 'Identité + mise en ligne de vos produits + affiche WhatsApp', '600 DH']],
     designDone: 'Nous vous contacterons sur WhatsApp pour lancer le design.',
     brand: 'Khayrat Bladi', post: 'Déposer une annonce', heroTitle: 'Les trésors du Maroc, directement du producteur',
@@ -619,9 +622,9 @@ const T = {
     storeSubmit: 'Request my store', storeDoneTitle: 'Request received!', storeDoneText: 'We will contact you on WhatsApp to confirm and activate your store.',
     limitNote: 'Free account: up to 5 ads per phone number. Lots of products?',
     errLimit: 'Free limit reached (5 ads). Open a store to publish unlimited products.',
-    errExists: 'A store is already active with this number. Add your products via “Post an ad”.', errLogo: 'Please add a logo or choose a design package.',
+    errExists: 'A store is already active with this number. Add your products via “Post an ad”.', errLogo: 'Please add a logo or order the design service.',
     designBanner: 'A professional store: we design your logo, cover and description from 150 MAD', designGo: 'Order',
-    designQ: 'No logo or professional photos?', designHint: 'Pick a design package and we will contact you on WhatsApp. You can leave the logo empty.',
+    designQ: 'No logo or professional photos? We design them for you', designHint: 'We will contact you on WhatsApp. You can leave the logo empty.', designReq: 'Order now', designFee: '(extra fee)',
     designPlans: [['', 'No, I have my logo and photos', '', ''], ['start', 'Starter', 'Logo + cover + bio in Arabic and French', '150 MAD'], ['identity', 'Identity', 'Starter + 10 product photos retouched + pro descriptions', '350 MAD'], ['ready', 'Ready-made store', 'Identity + we add your products + WhatsApp poster', '600 MAD']],
     designDone: 'We will contact you on WhatsApp to start the design.',
     brand: 'Khayrat Bladi', post: 'Post an ad', heroTitle: "Morocco's finest, straight from the producer",
@@ -709,8 +712,6 @@ function setLang(l) {
   document.querySelectorAll('.lang button').forEach(b => b.classList.toggle('on', b.dataset.lang === S.lang));
   $('#termsBody').innerHTML = t('termsHtml');
   $('#plansBox').innerHTML = t('plansHtml');
-  const cur = ($('#storeForm') && $('#storeForm').design) ? $('#storeForm').design.value : '';
-  $('#designOpts').innerHTML = t('designPlans').map(p => '<label class="design-opt"><input type="radio" name="design" value="' + esc(p[0]) + '"' + (p[0] === cur ? ' checked' : '') + '><span><b>' + esc(p[1]) + '</b>' + (p[2] ? '<small>' + esc(p[2]) + '</small>' : '') + '</span>' + (p[3] ? '<span class="price">' + esc(p[3]) + '</span>' : '') + '</label>').join('');
   $('#adminContact').innerHTML = ADMIN_WHATSAPP ? esc(t('contactAdmin')) + '<a href="https://wa.me/' + esc(ADMIN_WHATSAPP) + '" target="_blank" rel="noopener" dir="ltr">+' + esc(ADMIN_WHATSAPP) + '</a>' : '';
   fillSelects();
   renderStores(); renderCats(); renderGrid();
