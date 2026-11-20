@@ -7,7 +7,7 @@
 <meta name="description" content="خيرات بلادي: منصة مغربية مجانية لعرض المنتوجات المحلية والمجالية – زيت الزيتون، العسل الحر، أركان، التمور، الفواكه الجافة – مباشرة من المنتج.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
 <style>
   /* ===== الهوية البصرية: أخضر الزيتون، ذهبي العسل، طين الأرض ===== */
   :root {
@@ -68,9 +68,29 @@
   .top .btn-honey { padding: 9px 14px; flex: none; }
 
   /* ===== البطل والبحث ===== */
-  .hero { background: linear-gradient(160deg, var(--olive) 0%, var(--olive-dark) 100%); color: #fff; padding: 26px 0 30px; }
-  .hero h1 { margin: 0 0 6px; font-size: clamp(22px, 5vw, 34px); font-weight: 800; }
-  .hero p { margin: 0 0 18px; opacity: .9; }
+  .hero { position: relative; background: #fbf5e6; color: var(--olive-dark); overflow: hidden; }
+  .hero-photo { position: absolute; top: 0; bottom: 0; left: 0; width: 56%; background: url("https://drive.google.com/thumbnail?id=1Jyjg34szCjsoMoj7otkLxTnoPojGY7_4&sz=w1400") center/cover no-repeat;
+    -webkit-mask-image: linear-gradient(to left, transparent 0, #000 22%); mask-image: linear-gradient(to left, transparent 0, #000 22%); }
+  [dir="ltr"] .hero-photo { left: auto; right: 0; -webkit-mask-image: linear-gradient(to right, transparent 0, #000 22%); mask-image: linear-gradient(to right, transparent 0, #000 22%); }
+  .hero-in { position: relative; padding: 34px 16px 30px; }
+  .hero-text { max-width: 560px; }
+  .hero-brand { display: flex; flex-direction: column; line-height: 1; margin-bottom: 14px; }
+  .hb-ar { font-family: 'Aref Ruqaa', 'Tajawal', serif; font-weight: 700; font-size: clamp(54px, 9vw, 92px); color: var(--olive-dark); line-height: 1.15; }
+  .hb-lat { font-weight: 800; letter-spacing: 3px; font-size: clamp(14px, 2.2vw, 20px); color: var(--clay); direction: ltr; align-self: flex-start; margin-top: 2px; }
+  .hero h1 { margin: 0 0 12px; font-size: clamp(22px, 4vw, 32px); font-weight: 800; color: var(--olive-dark); }
+  .hero-band { display: inline-block; background: var(--olive); color: #fff; font-weight: 700; padding: 7px 16px; border-radius: 10px; margin-bottom: 18px; font-size: 15px; }
+  .hero .search input, .hero .search select { border: 1px solid var(--line); }
+  .btn-orange { background: #e8731a; color: #fff; }
+  .btn-orange:hover { background: #d5650f; }
+  .btn-outline-olive { background: #fff; color: var(--olive-dark); border: 1.5px solid var(--olive); }
+  .hero-badges { list-style: none; padding: 0; margin: 18px 0 0; display: flex; flex-wrap: wrap; gap: 8px 18px; font-size: 14px; font-weight: 700; color: var(--olive-dark); }
+  .hero-badges li { display: flex; align-items: center; gap: 6px; }
+  .hero-badges svg { flex: none; }
+  @media (max-width: 760px) {
+    .hero-photo { position: static; width: auto; height: 190px; -webkit-mask-image: linear-gradient(to top, transparent 0, #000 30%); mask-image: linear-gradient(to top, transparent 0, #000 30%); }
+    .hero-in { padding-top: 0; margin-top: -12px; }
+    .hb-ar { font-size: 58px; }
+  }
   .search { display: flex; gap: 8px; flex-wrap: wrap; }
   .search input, .search select {
     flex: 1 1 220px; border: 0; border-radius: 12px; padding: 13px 14px; background: #fff; min-width: 0; color: var(--ink);
@@ -283,14 +303,26 @@
 </header>
 
 <section class="hero">
-  <div class="wrap">
-    <h1 data-t="heroTitle">خيرات بلادنا، من المنتج إليك مباشرة</h1>
-    <p data-t="heroSub">زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.</p>
-    <div class="search">
-      <input id="q" type="search" data-ph="searchPh" placeholder="ابحث: عسل الزعتر، زيت بلدي، أملو…" aria-label="search">
-      <select id="cityFilter" aria-label="city"></select>
+  <div class="hero-photo" role="img" aria-label="زيت الزيتون والعسل والتمور والفواكه الجافة المغربية"></div>
+  <div class="wrap hero-in">
+    <div class="hero-text">
+      <div class="hero-brand"><span class="hb-ar">خيرات بلادي</span><span class="hb-lat">KHAYRAT BLADI</span></div>
+      <h1 data-t="heroTitle">خيرات بلادنا، من المنتج إليك مباشرة</h1>
+      <div class="hero-band" data-t="heroBand">دعم للمنتوج المحلي… تنمية لمجتمعنا</div>
+      <div class="search">
+        <input id="q" type="search" data-ph="searchPh" placeholder="ابحث: عسل الزعتر، زيت بلدي، أملو…" aria-label="search">
+        <select id="cityFilter" aria-label="city"></select>
+      </div>
+      <div class="hero-cta">
+        <button type="button" class="btn btn-orange" id="discoverBtn"><span data-t="discover">اكتشف المنتوجات</span></button>
+        <button class="btn btn-outline-olive" data-openstore>🏪 <span data-t="openStore">افتح متجرك</span></button>
+      </div>
+      <ul class="hero-badges">
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#b5542e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 2.6 5.6 6 .7-4.5 4.1 1.2 6L12 16.4 6.7 19.4l1.2-6L3.4 9.3l6-.7z"/></svg><span data-t="badge1">منتوجات مغربية أصيلة</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#4a5d23" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8"/></svg><span data-t="badge2">دعم التعاونيات</span></li>
+        <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1fa855" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.5 8.5 0 0 1-12.6 7.4L3 20.5l1.6-5.2A8.5 8.5 0 1 1 21 11.5z"/></svg><span data-t="badge3">تواصل مباشر مع البائع</span></li>
+      </ul>
     </div>
-    <div class="hero-cta"><button class="btn btn-outline-light" data-openstore>🏪 <span data-t="openStore">افتح متجرك</span></button></div>
   </div>
 </section>
 
@@ -533,6 +565,7 @@ const T = {
     designDone: 'سنتواصل معك عبر واتساب لبدء التصميم.',
     brand: 'خيرات بلادي', post: 'أضف إعلانك', heroTitle: 'خيرات بلادنا، من المنتج إليك مباشرة',
     heroSub: 'زيت الزيتون، العسل الحر، أركان، التمور والفواكه الجافة… من التعاونيات والمنتجين في كل جهات المغرب.',
+    heroBand: 'دعم للمنتوج المحلي… تنمية لمجتمعنا', discover: 'اكتشف المنتوجات', badge1: 'منتوجات مغربية أصيلة', badge2: 'دعم التعاونيات', badge3: 'تواصل مباشر مع البائع',
     searchPh: 'ابحث: عسل الزعتر، زيت بلدي، أملو…', allCities: 'كل المدن', all: 'الكل',
     demo: 'وضع تجريبي: الإعلانات المعروضة أمثلة فقط. اربط المنصة بـ Google Sheets لتظهر الإعلانات الحقيقية.',
     sortNew: 'الأحدث', sortRating: 'الأعلى تقييماً', sortPriceAsc: 'السعر: من الأقل', sortPriceDesc: 'السعر: من الأعلى',
@@ -581,6 +614,7 @@ const T = {
     designDone: 'Nous vous contacterons sur WhatsApp pour lancer le design.',
     brand: 'Khayrat Bladi', post: 'Déposer une annonce', heroTitle: 'Les trésors du Maroc, directement du producteur',
     heroSub: "Huile d'olive, miel, argan, dattes, fruits secs… des coopératives et producteurs de toutes les régions du Maroc.",
+    heroBand: 'Soutenir le produit local… développer notre communauté', discover: 'Découvrir les produits', badge1: 'Produits marocains authentiques', badge2: 'Soutien aux coopératives', badge3: 'Contact direct avec le vendeur',
     searchPh: 'Rechercher : miel de thym, huile beldi, amlou…', allCities: 'Toutes les villes', all: 'Tout',
     demo: 'Mode démo : les annonces affichées sont des exemples. Connectez la plateforme à Google Sheets pour afficher les vraies annonces.',
     sortNew: 'Plus récentes', sortRating: 'Mieux notées', sortPriceAsc: 'Prix croissant', sortPriceDesc: 'Prix décroissant',
@@ -629,6 +663,7 @@ const T = {
     designDone: 'We will contact you on WhatsApp to start the design.',
     brand: 'Khayrat Bladi', post: 'Post an ad', heroTitle: "Morocco's finest, straight from the producer",
     heroSub: 'Olive oil, wild honey, argan, dates, dried fruits… from cooperatives and producers across every region of Morocco.',
+    heroBand: 'Supporting local products… growing our community', discover: 'Discover products', badge1: 'Authentic Moroccan products', badge2: 'Supporting cooperatives', badge3: 'Direct contact with the seller',
     searchPh: 'Search: thyme honey, beldi olive oil, amlou…', allCities: 'All cities', all: 'All',
     demo: 'Demo mode: the ads shown are examples. Connect the platform to Google Sheets to show real ads.',
     sortNew: 'Newest', sortRating: 'Top rated', sortPriceAsc: 'Price: low to high', sortPriceDesc: 'Price: high to low',
@@ -1044,6 +1079,8 @@ function pickOne(btn, input, prev, key, max) {
 }
 pickOne('#logoBtn', '#logoInput', '#logoPrev', 'logo', 600);
 pickOne('#coverBtn', '#coverInput', '#coverPrev', 'cover', 1600);
+
+$('#discoverBtn').onclick = () => $('#cats').scrollIntoView({ behavior: 'smooth', block: 'start' });
 
 $('#storeForm').onsubmit = async e => {
   e.preventDefault();
